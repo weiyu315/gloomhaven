@@ -19,4 +19,12 @@
       <Filter>資源檔</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="character.h">
+      <Filter>資源檔</Filter>
+    </ClInclude>
+    <ClInclude Include="monster.h">
+      <Filter>資源檔</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
