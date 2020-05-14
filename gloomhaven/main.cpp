@@ -9,5 +9,8 @@ using namespace std;
 
 int main()
 {
-	
+	string characterFile, monsterFile;
+	int debug;
+	cin >> characterFile >> monsterFile >> debug;
+
 }
