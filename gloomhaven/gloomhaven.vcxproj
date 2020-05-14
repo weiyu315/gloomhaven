@@ -141,6 +141,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="card.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="monster.h" />
   </ItemGroup>
