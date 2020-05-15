@@ -3,6 +3,7 @@
 #include<string>
 #include<fstream>
 #include<vector>
+#include"card.h"
 
 using namespace std;
 
@@ -117,6 +118,7 @@ void character::getData(string fileName)
 		tmp.set_initialCardAmount(initialCardAmountTmp);
 		cha.push_back(tmp);//透過tmp存入class
 		//卡片部分
+
 	}
 	inFile.close();
 }
