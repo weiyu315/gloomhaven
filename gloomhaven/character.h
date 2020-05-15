@@ -7,18 +7,21 @@
 
 using namespace std;
 
-class creature
+class creature :public card
 {
 public:
 	creature();
 	creature(string newName, int newHp);
 	void setName(string newName);
 	void setHp(int newHp);
+	//setCardDatabase
 	string getName();
 	int getHp();
+	//getCardDatabase
 private:
 	string name;
 	int hp;
+	vector<card> cardDatabase;
 };
 class character :public creature
 {
