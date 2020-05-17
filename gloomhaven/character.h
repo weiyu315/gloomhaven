@@ -14,10 +14,8 @@ public:
 	creature(string newName, int newHp);
 	void setName(string newName);
 	void setHp(int newHp);
-	//setCardDatabase
 	string getName();
 	int getHp();
-	//getCardDatabase
 private:
 	string name;
 	int hp;
@@ -29,8 +27,10 @@ public:
 	character();
 	character(string newName, int newHp, int newInitialCardAmount);
 	void set_initialCardAmount(int amount);
+	void setCardDatabase(int cardNumber, int cardDex, vector<string> upperSkill, vector<string> lowerSkill);
 	int get_initialCardAmount() const;
 	void getData(string fileName);
+	//getCardDatabase
 private:
 	int initialCardAmount;
 };
@@ -73,6 +73,13 @@ character::character(string newName, int newHp, int newInitialCardAmount)
 void character::set_initialCardAmount(int amount)
 {
 	initialCardAmount = amount;
+}
+void character::setCardDatabase(int cardNumber, int cardDex, vector<string> upperSkill, vector<string> lowerSkill)
+{
+	setCardNumber(cardNumber);
+	setCardDex(cardDex);
+	setUpperSkill(upperSkill);
+	setLowerSkill(lowerSkill);
 }
 int character::get_initialCardAmount() const
 {
