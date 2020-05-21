@@ -26,6 +26,7 @@ class character :public creature
 public:
 	character();
 	character(string newName, int newHp, int newInitialCardAmount);
+	//void set_AllData(string newName, int newHp, int newInitialCardAmount);
 	void set_initialCardAmount(int amount);
 	void setCardDatabase(int cardNumber, int cardDex, vector<string> upperSkill, vector<string> lowerSkill);
 	int get_initialCardAmount() const;
@@ -66,10 +67,16 @@ character::character()
 }
 character::character(string newName, int newHp, int newInitialCardAmount)
 {
-	creature::setName(newName);
-	creature::setHp(newHp);
+	setName(newName);
+	setHp(newHp);
 	initialCardAmount = newInitialCardAmount;
 }
+//void character::set_AllData(string newName, int newHp, int newInitialCardAmount)
+//{
+//	setName(newName);
+//	setHp(newHp);
+//	set_initialCardAmount(newInitialCardAmount);
+//}
 void character::set_initialCardAmount(int amount)
 {
 	initialCardAmount = amount;
