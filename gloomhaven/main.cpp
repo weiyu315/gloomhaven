@@ -17,14 +17,7 @@ int main(int argc, char* argv[])
 		int debug_Mode;
 		ifstream character_InFile(argv[1], ios::in), monster_InFile(argv[2], ios::in);
 		debug_Mode = atoi(argv[3]);
-		int character_amount;
-		vector<character> cha;
-		cha.resize(character_amount);
-		character_InFile >> character_amount;
-		string input;
 		
-		int characterAmount;
-		cin >> characterAmount;
 
 	}
 	

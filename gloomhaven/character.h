@@ -30,8 +30,8 @@ public:
 	void set_initialCardAmount(int amount);
 	void setCardDatabase(int cardNumber, int cardDex, vector<string> upperSkill, vector<string> lowerSkill);
 	int get_initialCardAmount() const;
-	void getData(string fileName);
 	//getCardDatabase
+	void setFileData_intoClass(string, vector<character>);//讀取檔案存入class
 private:
 	int initialCardAmount;
 };
@@ -92,22 +92,22 @@ int character::get_initialCardAmount() const
 {
 	return initialCardAmount;
 }
-void character::getData(string fileName)
+void character::setFileData_intoClass(string fileName, vector<character> cha)
 {//讀取檔案存入class
 	ifstream inFile(fileName, ios::in);
 	int characterAmount;
 	cin >> characterAmount;//有幾隻角色
-	vector<character> cha;
-	for (int times = 0; times < characterAmount; times++)
+	for (int character_number = 0; character_number < characterAmount; character_number++)
 	{
 		character tmp;
 		string characterInfo;
 		getline(inFile, characterInfo);
-		string nameTmp = nullptr;
+		string nameTmp;
+		nameTmp.clear();
 		int hpTmp = 0, initialCardAmountTmp = 0;
 		int step = 0;
 		for (int i = 0; i < characterInfo.size(); i++)
-		{//得到角色資料
+		{//tmp(character)得到角色資料
 			if (characterInfo[i] == ' ')
 			{
 				step++;
@@ -135,7 +135,14 @@ void character::getData(string fileName)
 		tmp.set_initialCardAmount(initialCardAmountTmp);
 		cha.push_back(tmp);//透過tmp存入class
 		//卡片部分
+		int cardAmount = 0;
+		cin >> cardAmount;
+		int newNumber, newDex;
+		for (int cardNumber = 0; cardNumber < cardAmount; cardNumber++)
+		{
+			inFile >> newNumber >> newDex;
 
+		}
 	}
 	inFile.close();
 }
