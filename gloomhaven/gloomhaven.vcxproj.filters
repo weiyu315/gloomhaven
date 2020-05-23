@@ -29,5 +29,8 @@
     <ClInclude Include="card.h">
       <Filter>資源檔</Filter>
     </ClInclude>
+    <ClInclude Include="monster_card.h">
+      <Filter>資源檔</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
