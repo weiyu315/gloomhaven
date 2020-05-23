@@ -5,7 +5,24 @@
 
 using namespace std;
 
-class card
+class cardValue
+{
+public:
+	cardValue();
+	cardValue(int newAttack, int newShield, int newMove, int newRange, int newHeal);
+	/*void setAttack(int);
+	void setShield(int);
+	void setMove(int);
+	void setRange(int);
+	void setHeal(int);*/
+private:
+	int attack;
+	int shield;
+	int move;
+	int range;
+	int heal;
+};
+class card:public cardValue
 {
 public:
 	card();
@@ -25,6 +42,22 @@ private:
 	vector<string> lowerSkill;
 };
 
+cardValue::cardValue()
+{
+	attack = 0;
+	shield = 0;
+	move = 0;
+	range = 0;
+	heal = 0;
+}
+cardValue::cardValue(int newA, int newS, int newM, int newR, int newH)
+{
+	attack = newA;
+	shield = newS;
+	move = newM;
+	range = newR;
+	heal = newH;
+}
 card::card()
 {
 	cardNumber = 0;
