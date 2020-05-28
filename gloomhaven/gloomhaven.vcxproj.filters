@@ -32,5 +32,11 @@
     <ClInclude Include="monster_card.h">
       <Filter>資源檔</Filter>
     </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>資源檔</Filter>
+    </ClInclude>
+    <ClInclude Include="evil_guy.h">
+      <Filter>資源檔</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

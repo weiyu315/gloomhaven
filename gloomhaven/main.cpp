@@ -4,6 +4,9 @@
 #include<fstream>
 #include"character.h"
 #include"monster.h"
+#include"map.h"
+#include"evil_guy.h"
+
 
 using namespace std;
 
@@ -14,6 +17,7 @@ int main(int argc, char* argv[])
 	if (play_or_exit == "play")
 	{
 		monster a("monster1.txt");
+		map b("map1.txt");
 
 		//角色、怪物檔案開啟
 		/*int debug_Mode;

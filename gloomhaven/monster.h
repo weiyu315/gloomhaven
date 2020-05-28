@@ -32,6 +32,9 @@ monster::monster() {
 		monster_hp[i].clear();
 		monster_range[i].clear();
 	}
+	for (int i = 0; i < card.size(); i++) {
+		card[i].clear();
+	}
 	monster_quantity = 0;
 };
 monster::monster(string  file_monster) {
@@ -45,7 +48,6 @@ monster::monster(string  file_monster) {
 	if (!file) {
 		cout << "找不到怪物的檔案\n";
 	}
-
 	else {
 		file>> monster_quantity;
 		file >> n;
@@ -96,7 +98,6 @@ monster::monster(string  file_monster) {
 			vector_temporarily_card.clear();
 		}
 	}
-	test();
 	file.close();
 };
 void monster::Set_Monster_Name(string new_monster_name) {
