@@ -19,21 +19,18 @@ public:
 private:
 	string name;
 	int hp;
-	vector<card> cardDatabase;
 };
 class character :public creature
 {
 public:
 	character();
 	character(string newName, int newHp, int newInitialCardAmount);
-	//void set_AllData(string newName, int newHp, int newInitialCardAmount);
 	void set_initialCardAmount(int amount);
-	void setCardDatabase(int cardNumber, int cardDex, vector<string> upperSkill, vector<string> lowerSkill);
 	int get_initialCardAmount() const;
-	//getCardDatabase
 	void setFileData_intoClass(string, vector<character>);//讀取檔案存入class
 private:
 	int initialCardAmount;
+	vector<card> handCard;
 };
 creature::creature()
 {
@@ -71,22 +68,9 @@ character::character(string newName, int newHp, int newInitialCardAmount)
 	setHp(newHp);
 	initialCardAmount = newInitialCardAmount;
 }
-//void character::set_AllData(string newName, int newHp, int newInitialCardAmount)
-//{
-//	setName(newName);
-//	setHp(newHp);
-//	set_initialCardAmount(newInitialCardAmount);
-//}
 void character::set_initialCardAmount(int amount)
 {
 	initialCardAmount = amount;
-}
-void character::setCardDatabase(int cardNumber, int cardDex, vector<string> upperSkill, vector<string> lowerSkill)
-{
-	setCardNumber(cardNumber);
-	setCardDex(cardDex);
-	setUpperSkill(upperSkill);
-	setLowerSkill(lowerSkill);
 }
 int character::get_initialCardAmount() const
 {
@@ -136,12 +120,35 @@ void character::setFileData_intoClass(string fileName, vector<character> cha)
 		cha.push_back(tmp);//透過tmp存入class
 		//卡片部分
 		int cardAmount = 0;
-		cin >> cardAmount;
+		vector<card> Card;
+		inFile >> cardAmount;
 		int newNumber, newDex;
+		string skill_name;
+		int skill_value;
+		inFile >> newNumber;
 		for (int cardNumber = 0; cardNumber < cardAmount; cardNumber++)
 		{
-			inFile >> newNumber >> newDex;
-
+			card cardTmp;
+			cardTmp.setCardNumber(newNumber);
+			bool upper = true;
+			inFile >> newDex;
+			cardTmp.setCardDex(newDex);
+			while (inFile >> skill_name)
+			{
+				if (skill_name == "-")
+				{
+					upper = false;
+					inFile >> skill_name;
+				}
+				if ('0' <= skill_name[0] && skill_name[0] <= '9')
+				{
+					newNumber = stoi(skill_name);
+					break;
+				}
+				inFile >> skill_value;
+				setSkill(cardTmp, skill_name, skill_value, upper);
+			}
+			cha[character_number].handCard.push_back(cardTmp);
 		}
 	}
 	inFile.close();
