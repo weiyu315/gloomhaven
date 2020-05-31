@@ -22,8 +22,13 @@ public:
 	void Set_Monster_hp(int new_hp, int normal_or_elite);//儲存生命
 	void Set_Monster_Attack(int new_attack,int normal_or_elite);//儲存攻擊後面傳入的值為判斷是否為精英怪
 	void Set_Monster_range(int new_hp, int normal_or_elite);//儲存射程
-	void test();
-	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	string Get_Monster_Name(int number);
+	int Get_Monster_hp(int number, int normal_or_elite);
+	int Get_Monster_Attack(int number, int normal_or_elite);
+	int Get_Monster_range(int number, int normal_or_elite);
+	vector<monster_card> Get_Monster_Card(int new_card);
+	int Get_Monster_number();
 };
 monster::monster() {
 	monster_name.clear();
@@ -112,52 +117,22 @@ void monster::Set_Monster_Attack(int new_attack, int normal_or_elite) {
 void monster::Set_Monster_range(int new_range, int normal_or_elite) {
 	monster_range[normal_or_elite].push_back(new_range);
 };
-void monster::test(){
-	vector<int>cardaction;
-	vector<vector<int>>cardactionvalue;
-	cout<<"怪獸有"<< monster_quantity<<"種"<<"\n";
-	for (int i = 0; i < monster_quantity; i++) {
-		cout << "第" << i + 1 << "隻叫" << monster_name[i] << "\n";
-		cout << "普通生命" << monster_hp[0][i] <<" 攻擊"<< monster_attack[0][i]<<" 範圍" << monster_range[0][i]<<"\n";
-		cout << "菁英生命" << monster_hp[1][i] << " 攻擊" << monster_attack[1][i] << " 範圍" << monster_range[1][i] << "\n";
-		cout << "有" << card[i].size() << "張卡\n";
-		for (int j = 0; j < card[i].size(); j++) {
-			cout << "編號" << card[i][j].Get_card_number() << " 敏捷值" << card[i][j].Get_card_agility();
-			cardaction = card[i][j].Get_card_action();
-			cardactionvalue=card[i][j].Get_card_action_value();
-			for (int k = 0;k< cardaction.size(); k++) {
-				if (cardaction[k] == 0) {
-					cout << " 移動";
-					for (int r = 0; r < cardactionvalue[k].size(); r++) {
-						if (cardactionvalue[k][r]==0) {
-							cout << "上";
-						}
-						if (cardactionvalue[k][r] == 1) {
-							cout << "左";
-						}
-						if (cardactionvalue[k][r] == 2) {
-							cout << "下";
-						}
-						if (cardactionvalue[k][r] == 3) {
-							cout << "右";
-						}
-					}
-				}
-				else if (cardaction[k] == 1) {
-					cout << " 攻擊加"<< cardactionvalue[k][0]<<"點";
-					if (monster_range[0][i] > 0) {
-						cout << " 範圍加" << cardactionvalue[k][1] << "點";
-					}
-				}
-				else if (cardaction[k] == 2) {
-					cout << " 加固"<< cardactionvalue[k][0]<<"點";
-				}
-				else if (cardaction[k] == 3) {
-					cout << " 回血"<< cardactionvalue[k][0]<<"點";
-				}
-
-			}
-			cout << "\n";
-		}
-	}
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+string monster::Get_Monster_Name(int number) {
+	return monster_name[number];
+};
+int monster::Get_Monster_hp(int number, int normal_or_elite) {
+	return monster_hp[normal_or_elite][number];
+};
+int monster::Get_Monster_Attack(int number, int normal_or_elite) {
+	return monster_attack[normal_or_elite][number];
+};
+int monster::Get_Monster_range(int number, int normal_or_elite) {
+	return monster_range[normal_or_elite][number];
+};
+vector<monster_card> monster::Get_Monster_Card(int number) {
+	return card[number];
+};
+int monster::Get_Monster_number() {
+	return monster_name.size();
+};

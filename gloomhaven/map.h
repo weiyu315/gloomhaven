@@ -23,6 +23,12 @@ public:
 	void Text();//測試用
 	void Set_startlocation(int x,int y,int n);
 	void Set_monster_information(string name,int x,int y,int one,int two,int three);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	int Get_monster_quaility();//得到怪物的數量
+	string Get_monster_name(int n);
+	int Get_monster_location_x(int n);
+	int Get_monster_location_y(int n);
+	int Get_monster_status(int n,int hero_qualify);
 };
 map::map() {
 	hight = 0;
@@ -121,4 +127,20 @@ void map::Set_monster_information(string name, int x, int y, int one, int two, i
 	monster_status[0].push_back(one);
 	monster_status[1].push_back(two);
 	monster_status[2].push_back(three);
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int map::Get_monster_quaility() {
+	return monster_location_x.size();
+};
+string map::Get_monster_name(int n) {
+	return monster_name[n];
+};
+int map::Get_monster_location_x(int n) {
+	return monster_location_x[n];
+};
+int map::Get_monster_location_y(int n) {
+	return monster_location_y[n];
+};
+int map::Get_monster_status(int n, int hero_qualify) {
+return monster_status[hero_qualify-2][n];
 };
