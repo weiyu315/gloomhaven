@@ -25,16 +25,17 @@ class card
 {
 public:
 	card();
-	card(int newCardNumber, int newCardDex, vector<cardValue> skill[2]);
+	card(int newCardNumber, int newCardDex, cardValue skill[2]);
 	void setCardNumber(int);
 	void setCardDex(int);
-	void setSkill(card cardTmp, string skill_name, int skill_value ,bool upper);
+	void setSkill(string skill_name, int skill_value ,bool upper);
 	int getCardNumber() const;
 	int getCardDex() const;
+	cardValue skill[2];//0场だ 1场だ
 private:
 	int cardNumber;
 	int cardDex;
-	vector<cardValue> skill[2];//0场だ 1场だ
+
 	//vector<cardAction> upperAction;
 	//vector<cardAction> lowerAction;
 };
@@ -60,15 +61,21 @@ card::card()
 {
 	cardNumber = 0;
 	cardDex = 0;
-	skill[0].clear();
-	skill[1].clear();
+	for (auto n : skill)
+	{
+		n.attack = 0;
+		n.heal = 0;
+		n.move = 0;
+		n.range = 0;
+		n.shield = 0;
+	}
 }
-card::card(int newCardNumber, int newCardDex, vector<cardValue> newSkill[2])
+card::card(int newCardNumber, int newCardDex, cardValue newSkill[2])
 {
 	cardNumber = newCardNumber;
 	cardDex = newCardDex;
-	skill[0].assign(newSkill[0].begin(), newSkill[0].end());
-	skill[1].assign(newSkill[1].begin(), newSkill[1].end());
+	skill[0] = newSkill[0];
+	skill[1] = newSkill[1];
 }
 void card::setCardNumber(int newCardNumber)
 {
@@ -78,7 +85,7 @@ void card::setCardDex(int newCardDex)
 {
 	cardDex = newCardDex;
 }
-void card::setSkill(card cardTmp, string skill_name, int skill_value, bool upper)
+void card::setSkill(string skill_name, int skill_value, bool upper)
 {
 	cardValue tmp;
 	switch (skill_name[0])
@@ -103,11 +110,11 @@ void card::setSkill(card cardTmp, string skill_name, int skill_value, bool upper
 	}
 	if (upper)
 	{
-		cardTmp.skill[0].push_back(tmp);
+		this->skill[0] = tmp;
 	}
 	else
 	{
-		cardTmp.skill[1].push_back(tmp);
+		this->skill[1] = tmp;
 	}
 }
 int card::getCardNumber() const
