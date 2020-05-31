@@ -18,11 +18,14 @@
     <ClCompile Include="main.cpp">
       <Filter>資源檔</Filter>
     </ClCompile>
+    <ClCompile Include="base.cpp">
+      <Filter>資源檔</Filter>
+    </ClCompile>
+    <ClCompile Include="character.cpp">
+      <Filter>資源檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="character.h">
-      <Filter>資源檔</Filter>
-    </ClInclude>
     <ClInclude Include="monster.h">
       <Filter>資源檔</Filter>
     </ClInclude>
@@ -32,10 +35,10 @@
     <ClInclude Include="monster_card.h">
       <Filter>資源檔</Filter>
     </ClInclude>
-    <ClInclude Include="map.h">
+    <ClInclude Include="base.h">
       <Filter>資源檔</Filter>
     </ClInclude>
-    <ClInclude Include="evil_guy.h">
+    <ClInclude Include="character.h">
       <Filter>資源檔</Filter>
     </ClInclude>
   </ItemGroup>
