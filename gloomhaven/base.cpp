@@ -43,6 +43,7 @@ void skill::set_skill(string newSkill_name, int newVal)
 	else
 	{
 		this->type = -1;
+		return;
 	}
 	this->value = newVal;
 }
