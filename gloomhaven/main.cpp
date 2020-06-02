@@ -62,8 +62,8 @@ int main(int argc, char* argv[])
 				re_Monster.initialization_bad_guy(Map.Get_monster_name(i),Map.Get_monster_char_name(i), Map.Get_monster_location_x(i), Map.Get_monster_location_y(i), Map.Get_monster_status(i, playCharacter_amount), a);
 				Monster.push_back(re_Monster);
 			}
-			/*---------------------------------讀取地圖檔案---------------------------------*/
 		}
+		/*---------------------------------讀取地圖檔案---------------------------------*/
 		/*-------------------------------------顯示地圖----------------------------------------*/
 		Map.output_decide_map(Monster);
 		/*-------------------------------------顯示地圖----------------------------------------*/
