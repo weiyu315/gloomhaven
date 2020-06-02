@@ -18,16 +18,20 @@ private:
 	int y;
 	vector<monster_card>card;
 public:
-	void initialization_bad_guy(string monsters,int monster_location_x,int monster_location_y,int monster_status,monster a);//設定怪物初始值
+	void initialization_bad_guy(string monsters,char monster_char_name,int monster_location_x,int monster_location_y,int monster_status,monster a);//設定怪物初始值
 	void re_zero();//清空資料
 	void text();
+	int Get_x();
+	int Get_y();
+	char Get_monster_card_name();
 };
-void evil_guy::initialization_bad_guy(string monsters, int monster_location_x, int monster_location_y, int monster_status, monster a) {
+void evil_guy::initialization_bad_guy(string monsters,char monster_char_name , int monster_location_x, int monster_location_y, int monster_status, monster a) {
 	x = monster_location_x;
 	y = monster_location_y;
 	for (int i = 0; i < a.Get_Monster_number(); i++) {
 		if (a.Get_Monster_Name(i) == monsters&&monster_status!=0) {
 			monster_name= a.Get_Monster_Name(i);
+			monster_card_name=monster_char_name;
 			monster_max_hp=a.Get_Monster_hp(i,monster_status-1);
 			monster_current_hp= monster_max_hp;
 			monster_attack=a.Get_Monster_Attack(i,monster_status-1);
@@ -46,3 +50,7 @@ void evil_guy::text() {
 	cout<<x<<"\n";//x跟y為怪物的位置
 	cout<<y<<"\n";
 };
+//////////////////////////////////////////////////////////////////////////////////////////
+int evil_guy::Get_x() { return x; };
+int evil_guy::Get_y() { return y; };
+char evil_guy::Get_monster_card_name() { return monster_card_name; };

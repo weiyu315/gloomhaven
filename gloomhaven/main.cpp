@@ -21,14 +21,14 @@ int main(int argc, char* argv[])
 	{
 		string map_file;
 		int debug_Mode;
-		characterFileReader(argv[1], Character);//角色讀檔
+		/*characterFileReader(argv[1], Character);//角色讀檔
 		ifstream monster_inFile(argv[2], ios::in);
 		debug_Mode = atoi(argv[3]);
 		/*-------------------------------讀取上場角色資料-------------------------------*/
 		vector<character> playCharacter;//上場的角色
 		int playCharacter_amount;
 		cin >> playCharacter_amount;
-		for (int i = 0; i < playCharacter_amount; i++)
+		/*for (int i = 0; i < playCharacter_amount; i++)
 		{
 			string playCharacter_name;
 			cin >> playCharacter_name;
@@ -49,22 +49,24 @@ int main(int argc, char* argv[])
 				}
 				playCharacter[playCharacter.size() - 1].hand_card.push_back(playCharacter[playCharacter.size() - 1].total_card[x]);
 			}
-		}
+		}*/
 		/*-------------------------------讀取上場角色資料-------------------------------*/
 		/*---------------------------------讀取地圖檔案---------------------------------*/
 		monster a("monster1.txt");//暫時
 		cin >> map_file;
-		map b(map_file);
+		map Map(map_file);
 		vector<evil_guy> Monster;//怪物
 		evil_guy  re_Monster;//儲存要放進vector的怪物
-		for (int i = 0; i < b.Get_monster_quaility(); i++) {
-			if (b.Get_monster_status(i, playCharacter_amount) == 1 || b.Get_monster_status(i, playCharacter_amount) == 2) {
-				re_Monster.initialization_bad_guy(b.Get_monster_name(i), b.Get_monster_location_x(i), b.Get_monster_location_y(i), b.Get_monster_status(i, playCharacter_amount), a);
-				re_Monster.text();
+		for (int i = 0; i < Map.Get_monster_quaility(); i++) {
+			if (Map.Get_monster_status(i, playCharacter_amount) == 1 || Map.Get_monster_status(i, playCharacter_amount) == 2) {
+				re_Monster.initialization_bad_guy(Map.Get_monster_name(i),Map.Get_monster_char_name(i), Map.Get_monster_location_x(i), Map.Get_monster_location_y(i), Map.Get_monster_status(i, playCharacter_amount), a);
 				Monster.push_back(re_Monster);
 			}
 			/*---------------------------------讀取地圖檔案---------------------------------*/
 		}
+		/*-------------------------------------顯示地圖----------------------------------------*/
+		Map.output_decide_map(Monster);
+		/*-------------------------------------顯示地圖----------------------------------------*/
 
 		return 0;
 	}
