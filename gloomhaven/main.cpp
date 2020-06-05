@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 		/*characterFileReader(argv[1], Character);//角色讀檔
 		ifstream monster_inFile(argv[2], ios::in);
 		debug_Mode = atoi(argv[3]);
-		/*-------------------------------讀取上場角色資料-------------------------------*/
+		/*------------------------------------讀取上場角色資料------------------------------------*/
 		vector<character> playCharacter;//上場的角色
 		int playCharacter_amount;
 		cin >> playCharacter_amount;
@@ -50,8 +50,7 @@ int main(int argc, char* argv[])
 				playCharacter[playCharacter.size() - 1].hand_card.push_back(playCharacter[playCharacter.size() - 1].total_card[x]);
 			}
 		}*/
-		/*-------------------------------讀取上場角色資料-------------------------------*/
-		/*---------------------------------讀取地圖檔案---------------------------------*/
+		/*--------------------------------------讀取地圖檔案--------------------------------------*/
 		monster a("monster1.txt");//暫時
 		cin >> map_file;
 		map Map(map_file);
@@ -63,10 +62,23 @@ int main(int argc, char* argv[])
 				Monster.push_back(re_Monster);
 			}
 		}
-		/*---------------------------------讀取地圖檔案---------------------------------*/
-		/*-------------------------------------顯示地圖----------------------------------------*/
+		/*---------------------------------------顯示地圖-----------------------------------------*/
 		Map.output_decide_map(Monster);
-		/*-------------------------------------顯示地圖----------------------------------------*/
+		/*-------------------------------------角色選2張牌----------------------------------------*/
+		for (int i = 0; i < playCharacter.size(); i++)
+		{
+			cin >> playCharacter[i].map_name;
+			int card_number = 0;
+			for (int j = 0; j < 2; j++)
+			{
+				cin >> card_number;
+				playCharacter[i].setUsing_card(j, card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
+			}
+			playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌作為本輪敏捷值
+		}
+		/*-----------------------------角色是否長休或是選擇牌順序---------------------------------*/
+		
+		
 
 		return 0;
 	}
@@ -130,7 +142,7 @@ int main(int argc, char* argv[])
 		inFile.close();
 	}
 
-	/*-------------------------------character資料庫輸出-------------------------------*/
+	/*------------------------------------character資料庫輸出-------------------------------------*/
 			//characterFileReader("character1.txt", Character);
 			//for (int i = 0; i < Character.size(); i++)
 			//{

@@ -6,6 +6,9 @@ character::character()
 	this->max_hp = 0;
 	this->total_card_amount = 0;
 	this->hand_card_amount = 0;
+	this->locate_x = 0;
+	this->locate_y = 0;
+	this->map_name.clear();
 }
 character::character(string newName, int newMax_hp, int newHand_card_amount, int newTotal_card_amount)
 {
@@ -16,4 +19,17 @@ character::character(string newName, int newMax_hp, int newHand_card_amount, int
 	this->total_card_amount = newTotal_card_amount;//取得總共牌數
 	//this->total_card.resize(this->total_card_amount);
 }
-
+void character::setUsing_card(int index, int newUsing_card_number, card newUsing_card[2], vector<card> newHand_card)
+{
+	int i = 0;
+	while (newHand_card[i].number != newUsing_card_number)
+	{
+		if (i >= newHand_card.size())
+		{
+			cout << "Warning: Card number isn't exist in hand_card.";
+			break;
+		}
+		i++;
+	}
+	newUsing_card[index] = newHand_card[i];
+}
