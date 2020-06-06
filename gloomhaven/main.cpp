@@ -64,7 +64,30 @@ int main(int argc, char* argv[])
 		}
 		/*---------------------------------------顯示地圖-----------------------------------------*/
 		Map.output_decide_map(Monster);
-		/*-------------------------------------角色選2張牌----------------------------------------*/
+		/*-----------------------------------------回合-------------------------------------------*/
+		int round = 0;
+		bool end_round = false;
+		while (!end_round)
+		{
+			/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
+			for (auto n : playCharacter)
+			{
+				if (n.round_hp > 0)
+				{
+					end_round = false;
+					goto end_for_loop;
+				}
+				end_round = true;
+			}
+			if (end_round) 
+			{
+				cout << "monster win~" << endl;
+				break; 
+			}
+			/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
+		end_for_loop:;
+
+		}
 		for (int i = 0; i < playCharacter.size(); i++)
 		{
 			cin >> playCharacter[i].map_name;
@@ -74,10 +97,11 @@ int main(int argc, char* argv[])
 				cin >> card_number;
 				playCharacter[i].setUsing_card(j, card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
 			}
-			playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌作為本輪敏捷值
+			playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
 		}
-		/*-----------------------------角色是否長休或是選擇牌順序---------------------------------*/
-		
+		/*-------------------------角色是否長休或是選擇牌順序或是check-----------------------------*/
+		string next_action = "";
+		getline(cin, next_action);
 		
 
 		return 0;
@@ -94,6 +118,7 @@ int main(int argc, char* argv[])
 			inFile >> newCharacter.name >> newCharacter.max_hp >> newCharacter.hand_card_amount;
 			inFile >> newCharacter.total_card_amount;
 			inFile.ignore();
+			newCharacter.round_hp = newCharacter.max_hp;
 			for (int j = 0; j < newCharacter.total_card_amount; j++)//讀取角色的每張卡片
 			{
 				card newCard;

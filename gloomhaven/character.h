@@ -25,4 +25,5 @@ public:
 
 	bool long_rest = false;
 	int round_dex = 0;//¥»½ü±Ó±¶­È
+	int round_hp = 0;//¥»½ü¦å¶q
 };
