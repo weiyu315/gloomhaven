@@ -58,53 +58,59 @@ int main(int argc, char* argv[])
 		evil_guy  re_Monster;//儲存要放進vector的怪物
 		for (int i = 0; i < Map.Get_monster_quaility(); i++) {
 			if (Map.Get_monster_status(i, playCharacter_amount) == 1 || Map.Get_monster_status(i, playCharacter_amount) == 2) {
-				re_Monster.initialization_bad_guy(Map.Get_monster_name(i),Map.Get_monster_char_name(i), Map.Get_monster_location_x(i), Map.Get_monster_location_y(i), Map.Get_monster_status(i, playCharacter_amount), a);
+				re_Monster.initialization_bad_guy(Map.Get_monster_name(i), Map.Get_monster_char_name(i), Map.Get_monster_location_x(i), Map.Get_monster_location_y(i), Map.Get_monster_status(i, playCharacter_amount), a);
 				Monster.push_back(re_Monster);
 			}
 		}
 		/*---------------------------------------顯示地圖-----------------------------------------*/
+		Map.Set_initialization_point();
 		Map.output_decide_map(Monster);
-		/*-----------------------------------------回合-------------------------------------------*/
-		int round = 0;
-		bool end_round = false;
-		while (!end_round)
-		{
-			/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
-			for (auto n : playCharacter)
+		for (int i = 0; i < playCharacter_amount; i++) {
+			Map.Set_start_point();
+			Map.Set_initialization_point();
+			Map.output_decide_map(Monster);
+			/*-----------------------------------------回合-------------------------------------------*/
+			int round = 0;
+			bool end_round = false;
+			while (!end_round)
 			{
-				if (n.round_hp > 0)
+				/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
+				for (auto n : playCharacter)
 				{
-					end_round = false;
-					goto end_for_loop;
+					if (n.round_hp > 0)
+					{
+						end_round = false;
+						goto end_for_loop;
+					}
+					end_round = true;
 				}
-				end_round = true;
-			}
-			if (end_round) 
-			{
-				cout << "monster win~" << endl;
-				break; 
-			}
-			/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
-		end_for_loop:;
+				if (end_round)
+				{
+					cout << "monster win~" << endl;
+					break;
+				}
+				/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
+			end_for_loop:;
 
-		}
-		for (int i = 0; i < playCharacter.size(); i++)
-		{
-			cin >> playCharacter[i].map_name;
-			int card_number = 0;
-			for (int j = 0; j < 2; j++)
-			{
-				cin >> card_number;
-				playCharacter[i].setUsing_card(j, card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
 			}
-			playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
-		}
-		/*-------------------------角色是否長休或是選擇牌順序或是check-----------------------------*/
-		string next_action = "";
-		getline(cin, next_action);
-		
+			for (int i = 0; i < playCharacter.size(); i++)
+			{
+				cin >> playCharacter[i].map_name;
+				int card_number = 0;
+				for (int j = 0; j < 2; j++)
+				{
+					cin >> card_number;
+					playCharacter[i].setUsing_card(j, card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
+				}
+				playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
+			}
+			/*-------------------------角色是否長休或是選擇牌順序或是check-----------------------------*/
+			string next_action = "";
+			getline(cin, next_action);
 
-		return 0;
+
+			return 0;
+		}
 	}
 }
 	void characterFileReader(string fileName, vector<character>& Character)
