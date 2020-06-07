@@ -59,54 +59,100 @@ int main(int argc, char* argv[])
 		evil_guy  re_Monster;//儲存要放進vector的怪物
 		for (int i = 0; i < Map.Get_monster_quaility(); i++) {
 			if (Map.Get_monster_status(i, playCharacter_amount) == 1 || Map.Get_monster_status(i, playCharacter_amount) == 2) {
-				re_Monster.initialization_bad_guy(Map.Get_monster_name(i),Map.Get_monster_char_name(i), Map.Get_monster_location_x(i), Map.Get_monster_location_y(i), Map.Get_monster_status(i, playCharacter_amount), a);
+				re_Monster.initialization_bad_guy(Map.Get_monster_name(i), Map.Get_monster_char_name(i), Map.Get_monster_location_x(i), Map.Get_monster_location_y(i), Map.Get_monster_status(i, playCharacter_amount), a);
 				Monster.push_back(re_Monster);
 			}
 		}
 		/*---------------------------------------顯示地圖-----------------------------------------*/
+		Map.Set_initialization_point();
 		Map.output_decide_map(Monster);
-		/*-----------------------------------------回合-------------------------------------------*/
-		int round = 0;
-		bool end_round = false;
-		while (!end_round)
-		{
-			/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
-			for (auto n : playCharacter)
+		for (int i = 0; i < playCharacter_amount; i++) {
+			Map.Set_start_point();
+			Map.Set_initialization_point();
+			Map.output_decide_map(Monster);
+		}
+			/*-----------------------------------------回合-------------------------------------------*/
+			int round = 0;
+			bool end_round = false;
+			while (!end_round)
 			{
-				if (n.round_hp > 0)
+				cout << "round " << ++round << ":" << endl;
+				/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
+				string action;
+				for (int i = 0; i < playCharacter.size(); i++)
 				{
-					end_round = false;
-					goto end_for_loop;
+					cin >> playCharacter[i].map_name >> action;
+					if (action == "-1")
+					{
+						if (playCharacter[i].discard_card.size() < 2)
+						{
+							cout << "error move!!!" << endl;
+						}
+						else
+						{
+							playCharacter[i].round_dex = 99;
+							playCharacter[i].long_rest = true;
+						}
+					}
+					else if (action == "check")
+					{
+						cout << "hand: ";
+						for (auto n : playCharacter[i].hand_card)
+						{
+							cout << n.number;
+							if (n.number != playCharacter[i].hand_card[playCharacter[i].hand_card.size() - 1].number)
+							{
+								cout << ", ";
+							}
+							else
+							{
+								cout << "; discard: ";
+							}
+						}
+						for (auto m : playCharacter[i].discard_card)
+						{
+							cout << m.number;
+							if (m.number != playCharacter[i].discard_card[playCharacter[i].discard_card.size() - 1].number)
+							{
+								cout << ", ";
+							}
+						}
+					}
+					else
+					{
+						int using_card_number;
+						using_card_number = stoi(action);
+						for (int j = 0; j < 2; j++)
+						{
+							playCharacter[i].setUsing_card(j, using_card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
+							cin >> using_card_number;
+						}
+					}
+					playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
 				}
-				end_round = true;
-			}
-			if (end_round) 
-			{
-				cout << "monster win~" << endl;
-				break; 
-			}
-			/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
 
-		end_for_loop:;
+				/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
+				for (auto n : playCharacter)
+				{
+					if (n.round_hp > 0)
+					{
+						end_round = false;
+						goto end_for_loop;
+					}
+					end_round = true;
+				}
+				if (end_round)
+				{
+					cout << "monster win~" << endl;
+					break;
+				}
+				/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
+			end_for_loop:;
 
-		}
-		for (int i = 0; i < playCharacter.size(); i++)
-		{
-			cin >> playCharacter[i].map_name;
-			int card_number = 0;
-			for (int j = 0; j < 2; j++)
-			{
-				cin >> card_number;
-				playCharacter[i].setUsing_card(j, card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
 			}
-			playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
-		}
-		/*-------------------------角色是否長休或是選擇牌順序或是check-----------------------------*/
-		string next_action = "";
-		getline(cin, next_action);
-		
 
-		return 0;
+
+			return 0;
 	}
 }
 	void characterFileReader(string fileName, vector<character>& Character)

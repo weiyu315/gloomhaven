@@ -26,7 +26,7 @@ void character::setUsing_card(int index, int newUsing_card_number, card newUsing
 	{
 		if (i >= newHand_card.size())
 		{
-			cout << "Warning: Card number isn't exist in hand_card.";
+			cout << "Warning: Card number isn't exist.";
 			break;
 		}
 		i++;
