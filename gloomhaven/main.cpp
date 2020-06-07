@@ -19,8 +19,10 @@ int main(int argc, char* argv[])
 	cin >> play_or_exit;
 	if (play_or_exit == "play")
 	{
+		cout << "請輸入出場角色數量:";
 		string map_file;
 		int debug_Mode;
+		characterFileReader("character1.txt", Character);
 		/*characterFileReader(argv[1], Character);//角色讀檔
 		ifstream monster_inFile(argv[2], ios::in);
 		debug_Mode = atoi(argv[3]);
@@ -28,7 +30,7 @@ int main(int argc, char* argv[])
 		vector<character> playCharacter;//上場的角色
 		int playCharacter_amount;
 		cin >> playCharacter_amount;
-		/*for (int i = 0; i < playCharacter_amount; i++)
+		for (int i = 0; i < playCharacter_amount; i++)
 		{
 			string playCharacter_name;
 			cin >> playCharacter_name;
@@ -49,7 +51,7 @@ int main(int argc, char* argv[])
 				}
 				playCharacter[playCharacter.size() - 1].hand_card.push_back(playCharacter[playCharacter.size() - 1].total_card[x]);
 			}
-		}*/
+		}
 		/*--------------------------------------讀取地圖檔案--------------------------------------*/
 		monster a("monster1.txt");//暫時
 		cin >> map_file;
@@ -74,6 +76,67 @@ int main(int argc, char* argv[])
 			bool end_round = false;
 			while (!end_round)
 			{
+				cout << "round " << ++round << ":" << endl;
+				/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
+				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				string action;
+				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				for (int i = 0; i < playCharacter.size(); i++)
+				{
+					cin >> playCharacter[i].map_name >> action;
+					if (action == "-1")
+					{
+						if (playCharacter[i].discard_card.size() < 2)
+						{
+							cout << "error move!!!" << endl;
+						}
+						else
+						{
+							playCharacter[i].round_dex = 99;
+							playCharacter[i].long_rest = true;
+						}
+					}
+					else if (action == "check")
+					{
+						cout << "hand: ";
+						for (auto n : playCharacter[i].hand_card)
+						{
+							cout << n.number;
+							if (n.number != playCharacter[i].hand_card[playCharacter[i].hand_card.size() - 1].number)
+							{
+								cout << ", ";
+							}
+							else
+							{
+								cout << "; discard: ";
+							}
+						}
+						for (auto m : playCharacter[i].discard_card)
+						{
+							cout << m.number;
+							if (m.number != playCharacter[i].discard_card[playCharacter[i].discard_card.size() - 1].number)
+							{
+								cout << ", ";
+							}
+						}
+						cout << endl;
+					}
+					else
+					{
+						cout << "i=" << i << endl;
+						///////////////////////////////////////////////////////////////////////////////
+						int using_card_number;
+						///////////////////////////////////////////////////////////////////////////////
+						using_card_number = stoi(action);
+						for (int j = 0; j < 2; j++)
+						{
+							cout << "j=" << j << endl;
+							playCharacter[i].setUsing_card(j, using_card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
+							cin >> using_card_number;
+						}
+					}
+					playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
+				}
 				/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
 				for (auto n : playCharacter)
 				{
@@ -93,22 +156,6 @@ int main(int argc, char* argv[])
 			end_for_loop:;
 
 			}
-			for (int i = 0; i < playCharacter.size(); i++)
-			{
-				cin >> playCharacter[i].map_name;
-				int card_number = 0;
-				for (int j = 0; j < 2; j++)
-				{
-					cin >> card_number;
-					playCharacter[i].setUsing_card(j, card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
-				}
-				playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
-			}
-			/*-------------------------角色是否長休或是選擇牌順序或是check-----------------------------*/
-			string next_action = "";
-			getline(cin, next_action);
-
-
 			return 0;
 		}
 	}

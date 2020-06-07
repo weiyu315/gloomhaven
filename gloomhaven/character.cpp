@@ -22,14 +22,19 @@ character::character(string newName, int newMax_hp, int newHand_card_amount, int
 void character::setUsing_card(int index, int newUsing_card_number, card newUsing_card[2], vector<card> newHand_card)
 {
 	int i = 0;
+	bool exist = true;
 	while (newHand_card[i].number != newUsing_card_number)
 	{
+		i++;
 		if (i >= newHand_card.size())
 		{
-			cout << "Warning: Card number isn't exist.";
+			exist = false;
+			cout << "Warning: Card number isn't exist." << endl;
 			break;
 		}
-		i++;
 	}
-	newUsing_card[index] = newHand_card[i];
+	if (exist)
+	{
+		newUsing_card[index] = newHand_card[i];
+	}
 }
