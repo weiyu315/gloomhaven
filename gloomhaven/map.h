@@ -14,13 +14,15 @@ private:
 	int width;
 	int startlocation_x[4];//儲存起始可選擇的位置
 	int startlocation_y[4];
-	int start_point_x;
+	int start_point_x;//儲存一開始*的位置
 	int start_point_y;
-	/////////////////////////////////////////////////////////////////
+	vector<int>hero_location_x;//儲存腳色選擇後的位子
+	vector<int>hero_location_y;
+	/*---------------------------------------------------------------*/
 	vector<int> door_x;//門的位置
 	vector<int> door_y;
 	vector<bool> door_open_or_close;//門是否開啟
-	///////////////////////////////////////////////////////////////////
+	/*===============================================================*/
 	vector<string> monster_name;
 	vector<char>monster_char_name;//怪物在地圖上的名字
 	vector<int>monster_location_x;
@@ -76,7 +78,6 @@ map::map(string file_map) {
 			file >> front >> back;//front為x值，back為y值
 			Set_startlocation(front, back, i);
 		}
-		Set_initialization_point();
 		initalization_map(startlocation_x[0],startlocation_y[0]);
 		file >> time;//輸入次數
 			for(int i = 0; i < time;i++) {
@@ -86,6 +87,7 @@ map::map(string file_map) {
 	}
 	file.close();
 };
+void map::Set_start_point() {};
 void map::Set_map_size(int h, int w) {
 	vector<bool> save_information;//暫存檔案
 

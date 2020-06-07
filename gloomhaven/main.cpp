@@ -65,7 +65,14 @@ int main(int argc, char* argv[])
 		}
 		/*---------------------------------讀取地圖檔案---------------------------------*/
 		/*-------------------------------------顯示地圖----------------------------------------*/
+		Map.Set_initialization_point();
 		Map.output_decide_map(Monster);
+		for (int i = 0; i < playCharacter_amount; i++) {
+		Map.Set_start_point();
+		Map.Set_initialization_point();
+		Map.output_decide_map(Monster);
+		}
+
 		/*-------------------------------------顯示地圖----------------------------------------*/
 
 		return 0;
