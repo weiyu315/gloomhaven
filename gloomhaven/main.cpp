@@ -63,12 +63,12 @@ int main(int argc, char* argv[])
 			}
 		}
 		/*---------------------------------------顯示地圖-----------------------------------------*/
-		Map.Set_initialization_point();
-		Map.output_decide_map(Monster);
 		for (int i = 0; i < playCharacter_amount; i++) {
-			Map.Set_start_point();
 			Map.Set_initialization_point();
 			Map.output_decide_map(Monster);
+			Map.Set_start_point();
+		}
+		Map.output(Monster);
 			/*-----------------------------------------回合-------------------------------------------*/
 			int round = 0;
 			bool end_round = false;
@@ -112,7 +112,6 @@ int main(int argc, char* argv[])
 			return 0;
 		}
 	}
-}
 	void characterFileReader(string fileName, vector<character>& Character)
 	{
 		ifstream inFile(fileName, ios::in);
