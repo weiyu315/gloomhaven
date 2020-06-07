@@ -87,7 +87,87 @@ map::map(string file_map) {
 	}
 	file.close();
 };
-void map::Set_start_point() {};
+void map::Set_start_point() {
+	string move;//移動指令
+	cin >> move;
+	bool does;
+
+	for (int i = 0; i < move.size(); i++) {
+		does = false;
+		if (move[i]=='w') {
+			for(int j=0;j<4;j++){
+				if (start_point_x == startlocation_x[j] && start_point_y-1 == startlocation_y[j]) {
+					for (int k=0; k < hero_location_x.size(); k++) {
+						if (hero_location_x[k] == startlocation_x[j] && hero_location_y[k] == startlocation_y[j]) {
+							does = true;
+						}
+					}
+					if (does == false) {
+						start_point_x = startlocation_x[j];
+						start_point_y = startlocation_y[j];
+						j = 4;
+					}
+				}
+			}
+		}
+		else if (move[i] == 'a') {
+			for (int j = 0; j < 4; j++) {
+				if (start_point_x-1 == startlocation_x[j] && start_point_y == startlocation_y[j]) {
+					for (int k=0; k < hero_location_x.size(); k++) {
+						if (hero_location_x[k] == startlocation_x[j] && hero_location_y[k] == startlocation_y[j]) {
+							does = true;
+						}
+					}
+					if (does == false) {
+						start_point_x = startlocation_x[j];
+						start_point_y = startlocation_y[j];
+						j = 4;
+					}
+				}
+			}
+		}
+		else if (move[i] == 's') {
+			for (int j = 0; j < 4; j++) {
+				if (start_point_x == startlocation_x[j] && start_point_y + 1 == startlocation_y[j]) {
+					for (int k=0; k < hero_location_x.size(); k++) {
+						if (hero_location_x[k] == startlocation_x[j] && hero_location_y[k] == startlocation_y[j]) {
+							does = true;
+						}
+					}
+					if (does == false) {
+						start_point_x = startlocation_x[j];
+						start_point_y = startlocation_y[j];
+						j = 4;
+					}
+				}
+			}
+		}
+		else if (move[i] == 'd') {
+			for (int j = 0; j < 4; j++) {
+				if (start_point_x + 1 == startlocation_x[j] && start_point_y == startlocation_y[j]) {
+					for (int k=0; k < hero_location_x.size(); k++) {
+						if (hero_location_x[k] == startlocation_x[j] && hero_location_y[k] == startlocation_y[j]) {
+							does = true;
+						}
+					}
+					if (does == false) {
+						start_point_x = startlocation_x[j];
+						start_point_y = startlocation_y[j];
+						j = 4;
+					}
+				}
+			}
+		}
+		else if (move[i] == 'e') {
+
+		}
+		else {
+			cout << "移動指令輸入錯誤\n";
+		}
+	}
+	hero_location_x.push_back(start_point_x);
+	hero_location_y.push_back(start_point_y);
+};
 void map::Set_map_size(int h, int w) {
 	vector<bool> save_information;//暫存檔案
 
@@ -174,14 +254,33 @@ void map::initalization_map(int x,int y) {
 };
 ////////////////////////////////////////////////////////////////////////////////////
 void map::Set_initialization_point() {
-
-	start_point_x= startlocation_x[0];
-	start_point_y= startlocation_y[0];
-
-	for (int i = 0; i < 4; i++) {
-		if (start_point_y > startlocation_y[i]|| (start_point_y == startlocation_y[i]&& start_point_x > startlocation_x[i])) {
+	bool does;
+	for (int i = 0; i <4; i++) {
+		does = false;
+		for (int j = 0; j < hero_location_x.size(); j++) {
+			if (hero_location_x[j] == startlocation_x[i]&& hero_location_y[j] == startlocation_y[i]) {
+				does = true;
+			}
+		}
+		if (does == false) {
 			start_point_x = startlocation_x[i];
 			start_point_y = startlocation_y[i];
+		}
+	}
+	hero_location_x;//儲存腳色選擇後的位子
+	hero_location_y;
+	for (int i = 0; i < 4; i++) {
+		if (start_point_y > startlocation_y[i]|| (start_point_y == startlocation_y[i]&& start_point_x > startlocation_x[i])) {
+			does = false;
+			for (int j = 0; j < hero_location_x.size(); j++) {
+				if (hero_location_x[j] == startlocation_x[i] && hero_location_y[j] == startlocation_y[i]) {
+					does = true;
+				}
+			}
+			if (does == false) {
+				start_point_x = startlocation_x[i];
+				start_point_y = startlocation_y[i];
+			}
 		}
 	}
 
@@ -241,7 +340,7 @@ void map::output(vector<evil_guy> Monster) {
 				cout << " ";
 			}
 			else {
-				cout << original_map[i][j];
+				cout << output_point_map(j, i, Monster, 1);
 			}
 		}
 		cout << "\n";
@@ -254,6 +353,13 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 				if (start_point_x == x && start_point_y == y) {
 					return '*';
 				}
+				else {
+					for (int j = 0; j < hero_location_x.size(); j++) {
+						if (x == hero_location_x[j] && y == hero_location_y[j]) {
+							return 'A' + j;
+						}
+					}
+				}
 				return '_';
 			}
 		}
@@ -263,5 +369,18 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 			}
 		}
 		return original_map[y][x]+48;
+	}
+	if (level == 1) {
+		for (int j = 0; j < hero_location_x.size(); j++) {
+			if (x == hero_location_x[j] && y == hero_location_y[j]) {
+				return 'A' + j;
+			}
+		}
+		for (int i = 0; i < Monster.size(); i++) {
+			if (Monster[i].Get_x() == x && Monster[i].Get_y() == y) {
+				return Monster[i].Get_monster_card_name();
+			}
+		}
+		return original_map[y][x] + 48;
 	}
 };
