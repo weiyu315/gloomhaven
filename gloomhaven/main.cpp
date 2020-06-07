@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 		/*characterFileReader(argv[1], Character);//角色讀檔
 		ifstream monster_inFile(argv[2], ios::in);
 		debug_Mode = atoi(argv[3]);
-		/*-------------------------------讀取上場角色資料-------------------------------*/
+		/*------------------------------------讀取上場角色資料------------------------------------*/
 		vector<character> playCharacter;//上場的角色
 		int playCharacter_amount;
 		cin >> playCharacter_amount;
@@ -50,8 +50,7 @@ int main(int argc, char* argv[])
 				playCharacter[playCharacter.size() - 1].hand_card.push_back(playCharacter[playCharacter.size() - 1].total_card[x]);
 			}
 		}*/
-		/*-------------------------------讀取上場角色資料-------------------------------*/
-		/*---------------------------------讀取地圖檔案---------------------------------*/
+		/*--------------------------------------讀取地圖檔案--------------------------------------*/
 		monster a("monster1.txt");//暫時
 		cin >> map_file;
 		map Map(map_file);
@@ -63,17 +62,47 @@ int main(int argc, char* argv[])
 				Monster.push_back(re_Monster);
 			}
 		}
-		/*---------------------------------讀取地圖檔案---------------------------------*/
-		/*-------------------------------------顯示地圖----------------------------------------*/
-		Map.Set_initialization_point();
+		/*---------------------------------------顯示地圖-----------------------------------------*/
 		Map.output_decide_map(Monster);
-		for (int i = 0; i < playCharacter_amount; i++) {
-		Map.Set_start_point();
-		Map.Set_initialization_point();
-		Map.output_decide_map(Monster);
-		}
+		/*-----------------------------------------回合-------------------------------------------*/
+		int round = 0;
+		bool end_round = false;
+		while (!end_round)
+		{
+			/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
+			for (auto n : playCharacter)
+			{
+				if (n.round_hp > 0)
+				{
+					end_round = false;
+					goto end_for_loop;
+				}
+				end_round = true;
+			}
+			if (end_round) 
+			{
+				cout << "monster win~" << endl;
+				break; 
+			}
+			/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
+		end_for_loop:;
 
-		/*-------------------------------------顯示地圖----------------------------------------*/
+		}
+		for (int i = 0; i < playCharacter.size(); i++)
+		{
+			cin >> playCharacter[i].map_name;
+			int card_number = 0;
+			for (int j = 0; j < 2; j++)
+			{
+				cin >> card_number;
+				playCharacter[i].setUsing_card(j, card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
+			}
+			playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
+		}
+		/*-------------------------角色是否長休或是選擇牌順序或是check-----------------------------*/
+		string next_action = "";
+		getline(cin, next_action);
+		
 
 		return 0;
 	}
@@ -89,6 +118,7 @@ int main(int argc, char* argv[])
 			inFile >> newCharacter.name >> newCharacter.max_hp >> newCharacter.hand_card_amount;
 			inFile >> newCharacter.total_card_amount;
 			inFile.ignore();
+			newCharacter.round_hp = newCharacter.max_hp;
 			for (int j = 0; j < newCharacter.total_card_amount; j++)//讀取角色的每張卡片
 			{
 				card newCard;
@@ -137,7 +167,7 @@ int main(int argc, char* argv[])
 		inFile.close();
 	}
 
-	/*-------------------------------character資料庫輸出-------------------------------*/
+	/*------------------------------------character資料庫輸出-------------------------------------*/
 			//characterFileReader("character1.txt", Character);
 			//for (int i = 0; i < Character.size(); i++)
 			//{
