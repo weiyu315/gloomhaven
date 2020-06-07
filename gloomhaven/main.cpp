@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
 		/*------------------------------------讀取上場角色資料------------------------------------*/
 		vector<character> playCharacter;//上場的角色
 		int playCharacter_amount;
+		cout << "請輸入出場角色數量:";
 		cin >> playCharacter_amount;
 		/*for (int i = 0; i < playCharacter_amount; i++)
 		{
@@ -85,6 +86,7 @@ int main(int argc, char* argv[])
 				break; 
 			}
 			/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
+
 		end_for_loop:;
 
 		}
