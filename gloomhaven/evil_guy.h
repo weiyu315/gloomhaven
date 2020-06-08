@@ -24,6 +24,7 @@ public:
 	int Get_x();
 	int Get_y();
 	char Get_monster_card_name();
+	void choise_action(); 
 };
 void evil_guy::initialization_bad_guy(string monsters,char monster_char_name , int monster_location_x, int monster_location_y, int monster_status, monster a) {
 	x = monster_location_x;

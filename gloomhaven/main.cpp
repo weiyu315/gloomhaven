@@ -65,23 +65,28 @@ int main(int argc, char* argv[])
 			}
 		}
 		/*---------------------------------------顯示地圖-----------------------------------------*/
+		bool is_move_correct;
 		for (int i = 0; i < playCharacter_amount; i++) {
+			is_move_correct=false;
 			Map.Set_initialization_point();
 			Map.output_decide_map(Monster);
-			Map.Set_start_point();
+			is_move_correct=Map.Set_start_point();
+			if (is_move_correct == 0) {
+				i--;
+			}
 		}
 		Map.output(Monster);
 			/*-----------------------------------------回合-------------------------------------------*/
+		    string action;
+	     	int using_card_number; 
 			int round = 0;
 			bool end_round = false;
 			while (!end_round)
 			{
+				
 				cout << "round " << ++round << ":" << endl;
 				/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
-				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				string action;
-				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				for (int i = 0; i < playCharacter.size(); i++)
+				/*for (int i = 0; i < playCharacter.size(); i++)
 				{
 					cin >> playCharacter[i].map_name >> action;
 					if (action == "-1")
@@ -124,9 +129,6 @@ int main(int argc, char* argv[])
 					else
 					{
 						cout << "i=" << i << endl;
-						///////////////////////////////////////////////////////////////////////////////
-						int using_card_number;
-						///////////////////////////////////////////////////////////////////////////////
 						using_card_number = stoi(action);
 						for (int j = 0; j < 2; j++)
 						{
@@ -137,8 +139,12 @@ int main(int argc, char* argv[])
 					}
 					playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
 				}
+				/*-----------------------------------------怪獸選牌---------------------------------------------------*/
+				for (int i = 0; i < Monster.size(); i++) {
+					Monster[i] .choise_action;
+				}
 				/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
-				for (auto n : playCharacter)
+				/*for (auto n : playCharacter)
 				{
 					if (n.round_hp > 0)
 					{
