@@ -52,6 +52,12 @@ int main(int argc, char* argv[])
 				playCharacter[playCharacter.size() - 1].hand_card.push_back(playCharacter[playCharacter.size() - 1].total_card[x]);
 			}
 		}
+		char mapName = 'A';
+		for (auto& n : playCharacter)
+		{
+			n.map_name = mapName;
+			mapName++;
+		}
 		/*--------------------------------------讀取地圖檔案--------------------------------------*/
 		monster a("monster1.txt");//暫時
 		cin >> map_file;
@@ -65,49 +71,56 @@ int main(int argc, char* argv[])
 			}
 		}
 		/*---------------------------------------顯示地圖-----------------------------------------*/
-		bool is_move_correct;
 		for (int i = 0; i < playCharacter_amount; i++) {
-			is_move_correct=false;
 			Map.Set_initialization_point();
 			Map.output_decide_map(Monster);
-			is_move_correct=Map.Set_start_point();
-			if (is_move_correct == 0) {
-				i--;
-			}
+			Map.Set_start_point();
 		}
 		Map.output(Monster);
-			/*-----------------------------------------回合-------------------------------------------*/ 
-			int round = 0;
-			bool end_round = false;
-			int using_card_number;
-			string action;
-			while (!end_round)
+		/*-----------------------------------------回合-------------------------------------------*/
+		int round = 0;
+		bool end_round = false;
+		int using_card_number;
+		string first_input, action;
+		while (!end_round)
+		{
+			cout << "round " << ++round << ":" << endl;
+			/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
+			for (int i = 0; i < playCharacter.size(); i++)
 			{
-				
-				cout << "round " << ++round << ":" << endl;
-				/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
-				for (int i = 0; i < playCharacter.size(); i++)
+				cin >> first_input >> action;
+				int k = 0;
+				bool map_name = true;
+				for (; k < playCharacter.size(); k++)
 				{
-					cin >> playCharacter[i].map_name >> action;
+					if (playCharacter[k].map_name == first_input)
+					{
+						map_name = true;
+						break;
+					}
+					map_name = false;
+				}
+				if (map_name)//第一個輸入為角色代號ABC
+				{
 					if (action == "-1")
 					{
-						if (playCharacter[i].discard_card.size() < 2)
+						if (playCharacter[k].discard_card.size() < 2)
 						{
 							cout << "error move!!!" << endl;
 						}
 						else
 						{
-							playCharacter[i].round_dex = 99;
-							playCharacter[i].long_rest = true;
+							playCharacter[k].round_dex = 99;
+							playCharacter[k].long_rest = true;
 						}
 					}
 					else if (action == "check")
 					{
 						cout << "hand: ";
-						for (auto n : playCharacter[i].hand_card)
+						for (auto n : playCharacter[k].hand_card)
 						{
 							cout << n.number;
-							if (n.number != playCharacter[i].hand_card[playCharacter[i].hand_card.size() - 1].number)
+							if (n.number != playCharacter[k].hand_card[playCharacter[k].hand_card.size() - 1].number)
 							{
 								cout << ", ";
 							}
@@ -116,10 +129,10 @@ int main(int argc, char* argv[])
 								cout << "; discard: ";
 							}
 						}
-						for (auto m : playCharacter[i].discard_card)
+						for (auto m : playCharacter[k].discard_card)
 						{
 							cout << m.number;
-							if (m.number != playCharacter[i].discard_card[playCharacter[i].discard_card.size() - 1].number)
+							if (m.number != playCharacter[k].discard_card[playCharacter[k].discard_card.size() - 1].number)
 							{
 								cout << ", ";
 							}
@@ -128,125 +141,161 @@ int main(int argc, char* argv[])
 					}
 					else
 					{
-						cout << "i=" << i << endl;
 						using_card_number = stoi(action);
 						for (int j = 0; j < 2; j++)
 						{
-							playCharacter[i].setUsing_card(j, using_card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
+							playCharacter[k].setUsing_card(j, using_card_number, playCharacter[k].using_card, playCharacter[k].hand_card);
 							if (j != 1)
 							{
 								cin >> using_card_number;
 							}
 						}
-						playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
-					}
-				}
-				/*-----------------------------------------怪獸選牌---------------------------------------------------*/
-				for (int i = 0; i < Monster.size(); i++) {
-					if (Map.monster_decide(Monster[i].Get_x(), Monster[i].Get_y()) == 1) {
-						Monster[i].choise_action(debug_Mode);
-					}
 
-				}
-				/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
-				/*for (auto n : playCharacter)
-				{
-					if (n.round_hp > 0)
-					{
-						end_round = false;
-						goto end_for_loop;
-					}
-					end_round = true;
-				}
-				if (end_round)
-				{
-					cout << "monster win~" << endl;
-					break;
-				}*/
-				/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
-			/*end_for_loop:;*/
-
-			}
-			return 0;
-		}
-	}
-	void characterFileReader(string fileName, vector<character>& Character)
-	{
-		ifstream inFile(fileName, ios::in);
-		int character_amount;
-		inFile >> character_amount;//資料庫角色數量
-		for (int i = 0; i < character_amount; i++)//讀取角色資料
-		{
-			character newCharacter;
-			inFile >> newCharacter.name >> newCharacter.max_hp >> newCharacter.hand_card_amount;
-			inFile >> newCharacter.total_card_amount;
-			inFile.ignore();
-			newCharacter.round_hp = newCharacter.max_hp;
-			for (int j = 0; j < newCharacter.total_card_amount; j++)//讀取角色的每張卡片
-			{
-				card newCard;
-				string card_line;
-				getline(inFile, card_line);
-				stringstream ss(card_line);
-				ss >> newCard.number >> newCard.dex;
-				string newSkill_name;
-				int newVal;
-				bool above = true;
-				while (ss >> newSkill_name)
-				{
-					skill newSkill;
-					if (newSkill_name == "-")
-					{
-						above = false;
-						continue;
-					}
-					ss >> newVal;
-					if (newSkill_name == "range")
-					{
-						if (above)
+						playCharacter[k].round_dex = playCharacter[k].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
+						cout << playCharacter[k].map_name << " ";
+						if (0 <= playCharacter[k].round_dex && playCharacter[k].round_dex <= 9)
 						{
-							newCard.skill_above[newCard.skill_above.size() - 1].range = newVal;
+							cout << "0" << playCharacter[k].round_dex << " ";
 						}
 						else
 						{
-							newCard.skill_below[newCard.skill_below.size() - 1].range = newVal;
+							cout << playCharacter[k].round_dex << " ";
 						}
-						continue;
+						for (int x = 0; x < 2; x++)
+						{
+							cout << playCharacter[k].using_card[x].number;
+							if (x == 0)
+							{
+								cout << " ";
+							}
+							else
+							{
+								cout << endl;
+							}
+						}
 					}
-					newSkill.set_skill(newSkill_name, newVal);
+				}
+				else//第一個輸入不是角色代號
+				{
+
+				}
+			}
+			/*-----------------------------------------4-1怪物選牌-------------------------------------------*/
+			for (int i = 0; i < Monster.size(); i++) {
+				bool des;
+				if (Map.monster_decide(Monster[i].Get_x(), Monster[i].Get_y()) == 1) {
+					des = false;
+					for (int j = 0; j < i; j++) {
+						if (Map.monster_decide(Monster[j].Get_x(), Monster[j].Get_y()) == 1&& Monster[i].Get_monster_name()==Monster[j].Get_monster_name()) {
+							Monster[i].Set_correct_card(Monster[j].Get_correct_card());
+							des = true;
+						}
+					}
+					if (des == false) {
+						Monster[i].choise_action(debug_Mode);
+					}
+				}
+			}
+			/*-----------------------------------------4-1怪物選牌-------------------------------------------*/
+			/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
+			/*for (auto n : playCharacter)
+			{
+				if (n.round_hp > 0)
+				{
+					end_round = false;
+					goto end_for_loop;
+				}
+				end_round = true;
+			}
+			if (end_round)
+			{
+				cout << "monster win~" << endl;
+				break;
+			}*/
+			/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
+		/*end_for_loop:;*/
+
+		}
+		return 0;
+	}
+}
+void characterFileReader(string fileName, vector<character>& Character)
+{
+	ifstream inFile(fileName, ios::in);
+	int character_amount;
+	inFile >> character_amount;//資料庫角色數量
+	for (int i = 0; i < character_amount; i++)//讀取角色資料
+	{
+		character newCharacter;
+		inFile >> newCharacter.name >> newCharacter.max_hp >> newCharacter.hand_card_amount;
+		inFile >> newCharacter.total_card_amount;
+		inFile.ignore();
+		newCharacter.round_hp = newCharacter.max_hp;
+		for (int j = 0; j < newCharacter.total_card_amount; j++)//讀取角色的每張卡片
+		{
+			card newCard;
+			string card_line;
+			getline(inFile, card_line);
+			stringstream ss(card_line);
+			ss >> newCard.number >> newCard.dex;
+			string newSkill_name;
+			int newVal;
+			bool above = true;
+			while (ss >> newSkill_name)
+			{
+				skill newSkill;
+				if (newSkill_name == "-")
+				{
+					above = false;
+					continue;
+				}
+				ss >> newVal;
+				if (newSkill_name == "range")
+				{
 					if (above)
 					{
-						newCard.skill_above.push_back(newSkill);
+						newCard.skill_above[newCard.skill_above.size() - 1].range = newVal;
 					}
 					else
 					{
-						newCard.skill_below.push_back(newSkill);
+						newCard.skill_below[newCard.skill_below.size() - 1].range = newVal;
 					}
+					continue;
 				}
-				newCharacter.total_card.push_back(newCard);
+				newSkill.set_skill(newSkill_name, newVal);
+				if (above)
+				{
+					newCard.skill_above.push_back(newSkill);
+				}
+				else
+				{
+					newCard.skill_below.push_back(newSkill);
+				}
 			}
-			Character.push_back(newCharacter);
+			newCharacter.total_card.push_back(newCard);
 		}
-		inFile.close();
+		Character.push_back(newCharacter);
 	}
+	inFile.close();
+}
 
-	/*------------------------------------character資料庫輸出-------------------------------------*/
-			//characterFileReader("character1.txt", Character);
-			//for (int i = 0; i < Character.size(); i++)
-			//{
-			//	cout << Character[i].name << " " << Character[i].max_hp << " " << Character[i].hand_card_amount << endl;
-			//	for (int j = 0; j < Character[i].total_card_amount; j++)
-			//	{
-			//		cout << Character[i].total_card[j].number << " " << Character[i].total_card[j].dex << " ";
-			//		for (int m = 0; m < Character[i].total_card[j].skill_above.size(); m++)
-			//		{
-			//			cout << Character[i].total_card[j].skill_above[m].type << " " << Character[i].total_card[j].skill_above[m].value << " ";
-			//		}
-			//		cout << "- ";
-			//		for (int n = 0; n < Character[i].total_card[j].skill_below.size(); n++)
-			//		{
-			//			cout << Character[i].total_card[j].skill_below[n].type << " " << Character[i].total_card[j].skill_below[n].value << " ";
-			//		}
-			//		cout << endl;
-			//	}
-			//}
+/*------------------------------------character資料庫輸出-------------------------------------*/
+		//characterFileReader("character1.txt", Character);
+		//for (int i = 0; i < Character.size(); i++)
+		//{
+		//	cout << Character[i].name << " " << Character[i].max_hp << " " << Character[i].hand_card_amount << endl;
+		//	for (int j = 0; j < Character[i].total_card_amount; j++)
+		//	{
+		//		cout << Character[i].total_card[j].number << " " << Character[i].total_card[j].dex << " ";
+		//		for (int m = 0; m < Character[i].total_card[j].skill_above.size(); m++)
+		//		{
+		//			cout << Character[i].total_card[j].skill_above[m].type << " " << Character[i].total_card[j].skill_above[m].value << " ";
+		//		}
+		//		cout << "- ";
+		//		for (int n = 0; n < Character[i].total_card[j].skill_below.size(); n++)
+		//		{
+		//			cout << Character[i].total_card[j].skill_below[n].type << " " << Character[i].total_card[j].skill_below[n].value << " ";
+		//		}
+		//		cout << endl;
+		//	}
+		//}
