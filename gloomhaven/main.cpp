@@ -74,13 +74,12 @@ int main(int argc, char* argv[])
 			/*-----------------------------------------回合-------------------------------------------*/
 			int round = 0;
 			bool end_round = false;
+			int using_card_number;
+			string action;
 			while (!end_round)
 			{
 				cout << "round " << ++round << ":" << endl;
 				/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
-				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				string action;
-				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				for (int i = 0; i < playCharacter.size(); i++)
 				{
 					cin >> playCharacter[i].map_name >> action;
@@ -123,22 +122,20 @@ int main(int argc, char* argv[])
 					}
 					else
 					{
-						cout << "i=" << i << endl;
-						///////////////////////////////////////////////////////////////////////////////
-						int using_card_number;
-						///////////////////////////////////////////////////////////////////////////////
 						using_card_number = stoi(action);
 						for (int j = 0; j < 2; j++)
 						{
-							cout << "j=" << j << endl;
 							playCharacter[i].setUsing_card(j, using_card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
-							cin >> using_card_number;
+							if (j != 1)
+							{
+								cin >> using_card_number;
+							}
 						}
+						playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
 					}
-					playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
 				}
 				/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
-				for (auto n : playCharacter)
+				/*for (auto n : playCharacter)
 				{
 					if (n.round_hp > 0)
 					{
@@ -151,9 +148,9 @@ int main(int argc, char* argv[])
 				{
 					cout << "monster win~" << endl;
 					break;
-				}
+				}*/
 				/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
-			end_for_loop:;
+			/*end_for_loop:;*/
 
 			}
 			return 0;
