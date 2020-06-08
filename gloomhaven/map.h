@@ -36,7 +36,7 @@ public:
 	void Set_startlocation(int x,int y,int n);
 	void Set_monster_information(string name,int x,int y,int one,int two,int three,int i);
 	void Set_initialization_point();//初始化一開始的point
-	void Set_start_point();//選擇一開始的位置
+	bool Set_start_point();//選擇一開始的位置
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	int Get_monster_quaility();//得到怪物的數量
 	string Get_monster_name(int n);
@@ -49,6 +49,9 @@ public:
 	void output_decide_map(vector<evil_guy> Monster);
 	void output(vector<evil_guy> Monster);
 	char output_point_map(int x,int y,vector<evil_guy> Monster,int level);//level 0表示為選擇狀態，level1表示為正常
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	bool monster_decide(int x,int y);// 4-1 判斷怪物是否在顯示地圖內
 };
 map::map() {
 	hight = 0;
@@ -87,7 +90,7 @@ map::map(string file_map) {
 	}
 	file.close();
 };
-void map::Set_start_point() {
+bool map::Set_start_point() {
 	string move;//移動指令
 	cin >> move;
 	bool does;
@@ -163,10 +166,12 @@ void map::Set_start_point() {
 		}
 		else {
 			cout << "移動指令輸入錯誤\n";
+			return 0;
 		}
 	}
 	hero_location_x.push_back(start_point_x);
 	hero_location_y.push_back(start_point_y);
+	return 1;
 };
 void map::Set_map_size(int h, int w) {
 	vector<bool> save_information;//暫存檔案
@@ -383,4 +388,7 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 		}
 		return original_map[y][x] + 48;
 	}
+};
+bool map::monster_decide(int x, int y) {
+	return cout_map[y][x];
 };
