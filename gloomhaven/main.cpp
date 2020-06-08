@@ -81,12 +81,18 @@ int main(int argc, char* argv[])
 	     	int using_card_number; 
 			int round = 0;
 			bool end_round = false;
+			int using_card_number;
+			string action;
 			while (!end_round)
 			{
 				
 				cout << "round " << ++round << ":" << endl;
 				/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
+<<<<<<< HEAD
 				/*for (int i = 0; i < playCharacter.size(); i++)
+=======
+				for (int i = 0; i < playCharacter.size(); i++)
+>>>>>>> df9e8fdde3da3d0116ddad9218aeb7c175d26f1b
 				{
 					cin >> playCharacter[i].map_name >> action;
 					if (action == "-1")
@@ -128,16 +134,21 @@ int main(int argc, char* argv[])
 					}
 					else
 					{
+<<<<<<< HEAD
 						cout << "i=" << i << endl;
+=======
+>>>>>>> df9e8fdde3da3d0116ddad9218aeb7c175d26f1b
 						using_card_number = stoi(action);
 						for (int j = 0; j < 2; j++)
 						{
-							cout << "j=" << j << endl;
 							playCharacter[i].setUsing_card(j, using_card_number, playCharacter[i].using_card, playCharacter[i].hand_card);
-							cin >> using_card_number;
+							if (j != 1)
+							{
+								cin >> using_card_number;
+							}
 						}
+						playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
 					}
-					playCharacter[i].round_dex = playCharacter[i].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
 				}
 				/*-----------------------------------------怪獸選牌---------------------------------------------------*/
 				for (int i = 0; i < Monster.size(); i++) {
@@ -157,9 +168,9 @@ int main(int argc, char* argv[])
 				{
 					cout << "monster win~" << endl;
 					break;
-				}
+				}*/
 				/*-----------------------------------------判斷角色是否勝利-------------------------------------------*/
-			end_for_loop:;
+			/*end_for_loop:;*/
 
 			}
 			return 0;
