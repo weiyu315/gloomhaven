@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	{
 		cout << "請輸入出場角色數量:";
 		string map_file;
-		int debug_Mode;
+		int debug_Mode=1;
 		characterFileReader("character1.txt", Character);
 		/*characterFileReader(argv[1], Character);//角色讀檔
 		ifstream monster_inFile(argv[2], ios::in);
@@ -76,9 +76,7 @@ int main(int argc, char* argv[])
 			}
 		}
 		Map.output(Monster);
-			/*-----------------------------------------回合-------------------------------------------*/
-		    string action;
-	     	int using_card_number; 
+			/*-----------------------------------------回合-------------------------------------------*/ 
 			int round = 0;
 			bool end_round = false;
 			int using_card_number;
@@ -88,11 +86,7 @@ int main(int argc, char* argv[])
 				
 				cout << "round " << ++round << ":" << endl;
 				/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
-<<<<<<< HEAD
-				/*for (int i = 0; i < playCharacter.size(); i++)
-=======
 				for (int i = 0; i < playCharacter.size(); i++)
->>>>>>> df9e8fdde3da3d0116ddad9218aeb7c175d26f1b
 				{
 					cin >> playCharacter[i].map_name >> action;
 					if (action == "-1")
@@ -134,10 +128,7 @@ int main(int argc, char* argv[])
 					}
 					else
 					{
-<<<<<<< HEAD
 						cout << "i=" << i << endl;
-=======
->>>>>>> df9e8fdde3da3d0116ddad9218aeb7c175d26f1b
 						using_card_number = stoi(action);
 						for (int j = 0; j < 2; j++)
 						{
@@ -152,7 +143,10 @@ int main(int argc, char* argv[])
 				}
 				/*-----------------------------------------怪獸選牌---------------------------------------------------*/
 				for (int i = 0; i < Monster.size(); i++) {
-					Monster[i] .choise_action;
+					if (Map.monster_decide(Monster[i].Get_x(), Monster[i].Get_y()) == 1) {
+						Monster[i].choise_action(debug_Mode);
+					}
+
 				}
 				/*-----------------------------------------判斷怪物是否勝利-------------------------------------------*/
 				/*for (auto n : playCharacter)

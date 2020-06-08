@@ -49,6 +49,9 @@ public:
 	void output_decide_map(vector<evil_guy> Monster);
 	void output(vector<evil_guy> Monster);
 	char output_point_map(int x,int y,vector<evil_guy> Monster,int level);//level 0表示為選擇狀態，level1表示為正常
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	bool monster_decide(int x,int y);// 4-1 判斷怪物是否在顯示地圖內
 };
 map::map() {
 	hight = 0;
@@ -385,4 +388,7 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 		}
 		return original_map[y][x] + 48;
 	}
+};
+bool map::monster_decide(int x, int y) {
+	return cout_map[y][x];
 };
