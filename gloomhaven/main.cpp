@@ -240,6 +240,11 @@ int main(int argc, char* argv[])
 						output_Monster[i].round_order = output_Monster[j].round_order;
 						output_Monster[j].round_order = c;
 					}
+					if (output_Monster[i].Get_correct_card_agility() == output_Monster[j].Get_correct_card_agility() && output_Monster[i].round_order <	 output_Monster[j].round_order) {
+						c = output_Monster[i].round_order;
+						output_Monster[i].round_order = output_Monster[j].round_order;
+						output_Monster[j].round_order = c;
+					}
 				}
 			}
 			for (int i = 0; i < playCharacter.size(); i++) {
@@ -299,6 +304,19 @@ int main(int argc, char* argv[])
 				}
 			}
 			/*-----------------------------------------4-3戰鬥出牌-------------------------------------------*/
+			for (int i = 0; i < playCharacter.size() + output_Monster.size();i++) {
+				for (int j = 0; j < playCharacter.size(); j++) {
+					if (playCharacter[j].round_order == i) {
+
+					}
+				}
+				for (int j = 0; j < output_Monster.size(); j++) {
+					if (output_Monster[j].round_order == i) {
+
+					}
+				}
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////
 			string next_input;
 			for (auto& n : playCharacter)//每隻角色的每輪動作
 			{
