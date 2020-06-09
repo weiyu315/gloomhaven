@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	{
 		cout << "請輸入出場角色數量:";
 		string map_file;
-		int debug_Mode = 1;//暫時等於1
+		int debug_Mode = 0;//暫時等於1
 		characterFileReader("character1.txt", Character);
 		/*characterFileReader(argv[1], Character);//角色讀檔
 		ifstream monster_inFile(argv[2], ios::in);
@@ -63,6 +63,7 @@ int main(int argc, char* argv[])
 		cin >> map_file;
 		map Map(map_file);
 		vector<evil_guy> Monster;//怪物
+		vector<evil_guy> output_Monster;//存放怪物
 		evil_guy  re_Monster;//儲存要放進vector的怪物
 		for (int i = 0; i < Map.Get_monster_quaility(); i++) {
 			if (Map.Get_monster_status(i, playCharacter_amount) == 1 || Map.Get_monster_status(i, playCharacter_amount) == 2) {
@@ -183,30 +184,131 @@ int main(int argc, char* argv[])
 					}
 				}
 			}
-			for (auto n : playCharacter)
-			{
-				if (n.alive && !n.long_rest)
-				{
-					cout << n.map_name << " ";
-					if (0 <= n.round_dex && n.round_dex <= 9)
-					{
-						cout << "0" << n.round_dex << " ";
+			/*-----------------------------------------怪物選牌-------------------------------------------*/
+			output_Monster.clear();
+			for (int i = 0; i < Monster.size(); i++) {
+				if (Map.monster_decide(Monster[i].Get_x(), Monster[i].Get_y()) == 1) {
+					output_Monster.push_back(Monster[i]);
+				}
+			}
+			for (int i = 0; i < output_Monster.size(); i++) {
+				bool des;
+				des = false;
+				for (int j = 0; j < i; j++) {
+					if (output_Monster[i].Get_monster_name() == output_Monster[j].Get_monster_name()) {
+						output_Monster[i].Set_correct_card(output_Monster[j].Get_correct_card());
+						des = true;
 					}
-					else
-					{
-						cout << n.round_dex << " ";
+				}
+				if (des == false) {
+					output_Monster[i].choise_action(debug_Mode);
+				}
+			}
+			/*-----------------------------------------4-2順序出牌-------------------------------------------*/
+			int ro = playCharacter.size() + output_Monster.size();
+			for (int i = 0; i < playCharacter.size(); i++) {
+				playCharacter[i].round_order = i;
+			}
+			for (int i = 0; i < output_Monster.size(); i++) {
+				output_Monster[i].round_order = i + playCharacter.size();
+			}
+			int c;
+			for (int i = 0; i < playCharacter.size(); i++) {
+				for (int j = 0; j < i; j++) {
+					if (playCharacter[i].round_dex < playCharacter[j].round_dex && playCharacter[i].round_order > playCharacter[j].round_order) {
+						c = playCharacter[i].round_order;
+						playCharacter[i].round_order = playCharacter[j].round_order;
+						playCharacter[j].round_order = c;
 					}
-					for (int x = 0; x < 2; x++)
-					{
-						cout << n.using_card[x].number;
-						if (x == 0)
+					if (playCharacter[i].round_dex > playCharacter[j].round_dex&& playCharacter[i].round_order < playCharacter[j].round_order) {
+						c = playCharacter[i].round_order;
+						playCharacter[i].round_order = playCharacter[j].round_order;
+						playCharacter[j].round_order = c;
+					}
+				}
+			}
+			for (int i = 0; i < output_Monster.size(); i++) {
+				for (int j = 0; j < i; j++) {
+					if (output_Monster[i].Get_correct_card_agility() < output_Monster[j].Get_correct_card_agility() && output_Monster[i].round_order > output_Monster[j].round_order) {
+						c = output_Monster[i].round_order;
+						output_Monster[i].round_order = output_Monster[j].round_order;
+						output_Monster[j].round_order = c;
+					}
+					if (output_Monster[i].Get_correct_card_agility() > output_Monster[j].Get_correct_card_agility() && output_Monster[i].round_order < output_Monster[j].round_order) {
+						c = output_Monster[i].round_order;
+						output_Monster[i].round_order = output_Monster[j].round_order;
+						output_Monster[j].round_order = c;
+					}
+					if (output_Monster[i].Get_correct_card_agility() == output_Monster[j].Get_correct_card_agility() && output_Monster[i].round_order < output_Monster[j].round_order) {
+						c = output_Monster[i].round_order;
+						output_Monster[i].round_order = output_Monster[j].round_order;
+						output_Monster[j].round_order = c;
+					}
+				}
+			}
+			for (int i = 0; i < playCharacter.size(); i++) {
+				for (int j = 0; j < output_Monster.size(); j++) {
+					if (playCharacter[i].round_dex < output_Monster[j].Get_correct_card_agility() && playCharacter[i].round_order > output_Monster[j].round_order) {
+						c = playCharacter[i].round_order;
+						playCharacter[i].round_order = output_Monster[j].round_order;
+						output_Monster[j].round_order = c;
+					}
+					if (playCharacter[i].round_dex > output_Monster[j].Get_correct_card_agility() && playCharacter[i].round_order < output_Monster[j].round_order) {
+						c = playCharacter[i].round_order;
+						playCharacter[i].round_order = output_Monster[j].round_order;
+						output_Monster[j].round_order = c;
+					}
+				}
+			}
+			for (int i = 0; i < ro; i++) {
+				for (int j = 0; j < playCharacter.size(); j++) {
+					if (playCharacter[j].round_order == i) {
+						cout << playCharacter[j].map_name << " ";
+						if (0 <= playCharacter[j].round_dex && playCharacter[j].round_dex <= 9)
 						{
-							cout << " ";
+							cout << "0" << playCharacter[j].round_dex << " ";
 						}
 						else
 						{
-							cout << endl;
+							cout << playCharacter[j].round_dex << " ";
 						}
+						for (int x = 0; x < 2; x++)
+						{
+							cout << playCharacter[j].using_card[x].number;
+							if (x == 0)
+							{
+								cout << " ";
+							}
+							else
+							{
+								cout << endl;
+							}
+						}
+					}
+				}
+				for (int j = 0; j < output_Monster.size(); j++) {
+					bool des;
+					if (output_Monster[j].round_order == i) {
+						des = false;
+						for (int k = 0; k < j; k++) {
+							if (output_Monster[k].Get_monster_name() == output_Monster[j].Get_monster_name()) {
+								des = true;
+							}
+						}
+						if (des == false) {
+							output_Monster[j].output();
+						}
+					}
+				}
+			}
+			/*-----------------------------------------4-3戰鬥出牌-------------------------------------------*/
+			for (int i = 0; i < playCharacter.size() + output_Monster.size(); i++) {
+				for (int j = 0; j < playCharacter.size(); j++) {
+					if (playCharacter[j].round_order == i) {
+					}
+				}
+				for (int j = 0; j < output_Monster.size(); j++) {
+					if (output_Monster[j].round_order == i) {
 					}
 				}
 			}
@@ -224,11 +326,9 @@ int main(int argc, char* argv[])
 					card_numberTmp = stoi(next_input);
 
 				}
-			}
-			/*-----------------------------------------怪物選牌-------------------------------------------*/
-			for (int i = 0; i < Monster.size(); i++) {
-				if (Map.monster_decide(Monster[i].Get_x(), Monster[i].Get_y()) == 1) {
-					Monster[i].choise_action(debug_Mode);
+				else if (n.alive && n.long_rest)
+				{
+
 				}
 			}
 			cout << "round " << ++round << ":" << endl;
