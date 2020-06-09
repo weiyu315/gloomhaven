@@ -25,6 +25,7 @@ public:
 
 	bool long_rest = false;
 	int round_dex = 0;//セ近庇倍
+	int round_order;//4-3セ近抖(繰)
 	int round_hp = 0;//セ近﹀秖
 	int round_shield = 0;//セ近臔ヒ
 	bool alive = true;//à︹琌(true)(false)
