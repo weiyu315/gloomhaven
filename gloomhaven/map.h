@@ -510,6 +510,7 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 	int x;
 	int y;
 		while (ture == true) {
+			cout << "move command: ";
 			cin >> wave;
 			ture = false;
 			if (wave.size()>wafe) {
@@ -545,6 +546,7 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 				if (wave[i] == 'd') {
 					x++;
 				}
+				
 				for (int s = 0; s < Monster.size(); s++) {
 					if (Monster[s].Get_x()==x&& Monster[s].Get_y()==y) {
 						ture = true;
@@ -563,7 +565,7 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 				}
 			}
 			if (ture == true) {
-				cout << "error move\n";
+				cout << "error move!!!" << endl;
 			}
 		}
 	for (int i = 0; i < hero_char_name.size(); i++) {
