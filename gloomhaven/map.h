@@ -61,35 +61,47 @@ map::map() {
 };
 map::map(string file_map) {
 	fstream file;
+	string map_input;
 	string n;//放file輸出的暫存器
 	int front, back;//放兩個同時輸入的int
 	int one, two, three;//輸入兩個、三個、或四個人時的等級
 	int time;
-
-	file.open(file_map, ios::in);
-	if (!file) {
-		cout << "找不到地圖" << "\n";
-	}
-	else {
-		file >> front >> back;
-		Set_map_size(front,back);
-		for (int i = 0; i < hight; i++) {
-			file >> n;
-			Set_map(n);
+	int a = 0;
+	while (1) {
+		if (a == 0) {
+			map_input = file_map;
 		}
-		for (int i = 0; i < 4; i++) {
-			file >> front >> back;//front為x值，back為y值
-			Set_startlocation(front, back, i);
+		else {
+			cin >> map_input;
 		}
-		initalization_map(startlocation_x[0],startlocation_y[0]);
-		file >> time;//輸入次數
-			for(int i = 0; i < time;i++) {
-			file >> n >> front >> back >> one >> two >> three;
-			Set_monster_information(n,front,back, one, two,three,i);
+		a++;
+		file.open(map_input, ios::in);
+		if (!file) {
+			cout << "找不到地圖" << "\n";
 		}
-	}
-	file.close();
-};
+		else {
+			file >> front >> back;
+			Set_map_size(front, back);
+			for (int i = 0; i < hight; i++) {
+				file >> n;
+				Set_map(n);
+			}
+			for (int i = 0; i < 4; i++) {
+				file >> front >> back;//front為x值，back為y值
+				Set_startlocation(front, back, i);
+			}
+			initalization_map(startlocation_x[0], startlocation_y[0]);
+			file >> time;//輸入次數
+			for (int i = 0; i < time; i++) {
+				file >> n >> front >> back >> one >> two >> three;
+				Set_monster_information(n, front, back, one, two, three, i);
+			}
+			file.close();
+			return;
+		}
+		file.close();
+	};
+}
 bool map::Set_start_point() {
 	string move;//移動指令
 	cin >> move;
