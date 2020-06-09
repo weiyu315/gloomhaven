@@ -69,6 +69,7 @@ int main(int argc, char* argv[])
 			if (Map.Get_monster_status(i, playCharacter_amount) == 1 || Map.Get_monster_status(i, playCharacter_amount) == 2) {
 				re_Monster.initialization_bad_guy(Map.Get_monster_name(i), Map.Get_monster_char_name(i), Map.Get_monster_location_x(i), Map.Get_monster_location_y(i), Map.Get_monster_status(i, playCharacter_amount), a);
 				Monster.push_back(re_Monster);
+				Monster[Monster.size() - 1].live_or_die = 1;
 			}
 		}
 		/*---------------------------------------顯示地圖-----------------------------------------*/
@@ -430,8 +431,13 @@ int main(int argc, char* argv[])
 																Monster[b].monster_current_shield -= s.value;
 															}
 															Monster[b].monster_current_hp -= damage;
+															if (Monster[b].monster_current_hp <= 0) {
+																Monster[b].live_or_die = 0;
+															}
+															Map.output(Monster);
 															cout << playCharacter[j].map_name << " attack " << Monster[b].Get_monster_card_name() << damage << " damage, " << Monster[b].Get_monster_card_name() << " shield " << Monster[b].monster_current_shield << ", " << Monster[b].monster_current_shield << " remain " << Monster[b].monster_current_hp << " hp" << endl;
 															goto to_break;
+
 														}
 													}
 												}
