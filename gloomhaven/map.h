@@ -507,13 +507,16 @@ int map::attack_range(int c_x,int c_y,int m_x,int m_y,int range) {
 void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 	string wave;
 	bool ture=true;
+	bool ture2 = true;
 	int x;
 	int y;
+	while (ture2 == true){
 		while (ture == true) {
 			cout << "move command: ";
 			cin >> wave;
 			ture = false;
-			if (wave.size()>wafe) {
+			ture2 = false;
+			if (wave.size() > wafe) {
 				ture = true;
 			}
 			for (int i = 0; i < wave.size(); i++) {
@@ -526,6 +529,11 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 					}
 				}
 			}
+			if (ture == true) {
+				cout << "error move!!!" << endl;
+			}
+		}
+		ture = true;
 			for (int i = 0; i < hero_char_name.size(); i++) {
 				if (hero_char_name[i] == c_name) {
 					x = hero_location_x[i];
@@ -549,22 +557,22 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 				
 				for (int s = 0; s < Monster.size(); s++) {
 					if (Monster[s].Get_x()==x&& Monster[s].Get_y()==y) {
-						ture = true;
+						ture2 = true;
 					}
 				}
 				if (i == wave.size() - 1) {
 					for (int s = 0; s < hero_char_name.size(); s++) {
 						if (hero_location_x[s] == x && hero_location_y[s] == y&&c_name!=hero_char_name[i]) {
-							ture = true;
+							ture2 = true;
 						}
 					}
 				}
 				if (original_map[y][x] == 0 || original_map[y][x] == 2) {
-					ture= true;
+					ture2= true;
 					break;
 				}
 			}
-			if (ture == true) {
+			if (ture2 == true) {
 				cout << "error move!!!" << endl;
 			}
 		}
