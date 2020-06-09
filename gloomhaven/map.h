@@ -5,6 +5,7 @@
 #include<fstream>
 #include"monster.h"
 #include"evil_guy.h"
+#include"character.h"
 
 class map {
 private:
@@ -18,6 +19,7 @@ private:
 	int start_point_y;
 	vector<int>hero_location_x;//儲存腳色選擇後的位子
 	vector<int>hero_location_y;
+	vector<int>hero_char_name;
 	/*---------------------------------------------------------------*/
 	vector<int> door_x;//門的位置
 	vector<int> door_y;
@@ -52,6 +54,8 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	bool monster_decide(int x,int y);// 4-1 判斷怪物是否在顯示地圖內
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	bool distant(char character_name,char monster_name,int dist);
 };
 map::map() {
 	hight = 0;
@@ -181,6 +185,7 @@ bool map::Set_start_point() {
 			return 0;
 		}
 	}
+	hero_char_name.push_back('A' + hero_char_name.size() );
 	hero_location_x.push_back(start_point_x);
 	hero_location_y.push_back(start_point_y);
 	return 1;
@@ -373,7 +378,8 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 				else {
 					for (int j = 0; j < hero_location_x.size(); j++) {
 						if (x == hero_location_x[j] && y == hero_location_y[j]) {
-							return 'A' + j;
+							
+							return hero_char_name[j];
 						}
 					}
 				}
@@ -390,7 +396,7 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 	if (level == 1) {
 		for (int j = 0; j < hero_location_x.size(); j++) {
 			if (x == hero_location_x[j] && y == hero_location_y[j]) {
-				return 'A' + j;
+				return hero_char_name[j];
 			}
 		}
 		for (int i = 0; i < Monster.size(); i++) {
@@ -403,4 +409,6 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 };
 bool map::monster_decide(int x, int y) {
 	return cout_map[y][x];
+};
+bool map::distant(char character_name, char monster_name, int dist){
 };

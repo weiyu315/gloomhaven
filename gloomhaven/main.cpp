@@ -329,7 +329,7 @@ int main(int argc, char* argv[])
 				}
 				for (int j = 0; j < output_Monster.size(); j++) {
 					if (output_Monster[j].round_order == i) {
-						output_Monster[j].Get_correct_card
+						output_Monster[j].Get_correct_card();
 					}
 				}
 			}
