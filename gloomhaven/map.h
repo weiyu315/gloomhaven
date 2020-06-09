@@ -410,5 +410,5 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 bool map::monster_decide(int x, int y) {
 	return cout_map[y][x];
 };
-bool map::distant(char character_name, char monster_name, int dist){
-};
+//bool map::distant(char character_name, char monster_name, int dist){
+//};

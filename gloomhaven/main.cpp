@@ -94,10 +94,12 @@ int main(int argc, char* argv[])
 				n.long_rest = false;
 				n.round_shield = 0;
 			}
+			int playCharacter_amount = playCharacter.size();
 			while(true)
 			{
 				for (auto n : playCharacter)
 				{
+					cout << n.choose_using_card << " " << n.long_rest << endl;
 					if (n.long_rest || n.choose_using_card)
 					{
 						map_name_finish = true;
