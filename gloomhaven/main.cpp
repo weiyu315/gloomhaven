@@ -385,6 +385,8 @@ int main(int argc, char* argv[])
 											break;
 										case 2://move val
 											cout << "move command: ";
+											Map.move('A',5,Monster);
+											Map.output(Monster);
 											break;
 										case 3://heal val
 											if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
@@ -413,6 +415,8 @@ int main(int argc, char* argv[])
 											break;
 										case 2://move val
 											cout << "move command: ";
+											Map.move('A',5,Monster);
+											Map.output(Monster);
 											break;
 										case 3://heal val
 											if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
