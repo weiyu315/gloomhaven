@@ -21,7 +21,7 @@ public:
 
 	int locate_x = 0;
 	int locate_y = 0;
-	string map_name = "";//在地圖上顯示的名字 A、B、C等等
+	char map_name;//在地圖上顯示的名字 A、B、C等等
 
 	bool long_rest = false;
 	int round_dex = 0;//本輪敏捷值

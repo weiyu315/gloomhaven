@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
 				cin >> first_input;
 				for (; k < playCharacter.size(); k++)
 				{
-					if (playCharacter[k].map_name == first_input)
+					if (playCharacter[k].map_name == first_input[0])
 					{
 						map_name = true;
 						break;
@@ -358,6 +358,7 @@ int main(int argc, char* argv[])
 						if (playCharacter[j].alive && !playCharacter[j].long_rest)//若角色活著且非長休狀態
 						{
 							cout << playCharacter[j].map_name << "'s turn: card " << playCharacter[j].using_card[0].number << " " << playCharacter[j].using_card[1].number << endl;
+						restart:;
 							cin >> next_input;//輸入3d
 							up_or_down = next_input[next_input.size() - 1];//存d
 							next_input.pop_back();//刪除d
@@ -375,10 +376,15 @@ int main(int argc, char* argv[])
 								playCharacter[j].using_card[0].up = true;
 								playCharacter[j].using_card[1].up = false;
 							}
-							else
+							else if (up_or_down == 'd')
 							{
 								playCharacter[j].using_card[0].up = false;
 								playCharacter[j].using_card[1].up = true;
+							}
+							else
+							{
+								cout << "error input!!!" << endl;
+								goto restart;
 							}
 							char monster_map_name;
 							for (auto m : playCharacter[j].using_card)
@@ -390,12 +396,49 @@ int main(int argc, char* argv[])
 										switch (s.type)
 										{
 										case 0://attack val
+										start:;
 											cout << "attack monster: ";
 											cin >> monster_map_name;
 											if (monster_map_name != '0')
 											{
-
+												if ('a' <= monster_map_name && monster_map_name <= 'z')
+												{
+													if (Map.distant(playCharacter[j].map_name, monster_map_name, s.range))//判斷攻擊距離是否足夠
+													{
+														int b = 0;
+														bool find_monster = true;
+														for (; b < Monster.size(); b++)
+														{
+															if (Monster[b].Get_monster_card_name() == monster_map_name) 
+															{ 
+																find_monster = true;
+																break;
+															}
+															find_monster = false;
+														}
+														if (find_monster)
+														{
+															int damage;
+															if (s.value >= Monster[b].monster_current_shield)
+															{
+																damage = s.value - Monster[b].monster_current_shield;
+																Monster[b].monster_current_shield = 0;
+															}
+															else
+															{
+																damage = 0;
+																Monster[b].monster_current_shield -= s.value;
+															}
+															Monster[b].monster_current_hp -= damage;
+															cout << playCharacter[j].map_name << " attack " << Monster[b].Get_monster_card_name() << damage << " damage, " << Monster[b].Get_monster_card_name() << " shield " << Monster[b].monster_current_shield << ", " << Monster[b].monster_current_shield << " remain " << Monster[b].monster_current_hp << " hp" << endl;
+															goto to_break;
+														}
+													}
+												}
+												cout << "error target!!!" << endl;
+												goto start;
 											}
+											to_break:;
 											break;
 										case 1://shield val
 											playCharacter[j].round_shield += s.value;
@@ -403,6 +446,7 @@ int main(int argc, char* argv[])
 											break;
 										case 2://move val
 											cout << "move command: ";
+
 											break;
 										case 3://heal val
 											if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }

@@ -9,11 +9,13 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class evil_guy {
-private:
+
+public:
 	string monster_name;
 	char monster_card_name;
 	int monster_max_hp;//怪物的最大生命值
 	int monster_current_hp;//怪物當前生命
+	int monster_current_shield = 0;
 	int monster_attack;//怪物的攻擊值
 	int monster_range;//怪物的射程
 	int x;//x跟y為怪物的位置
@@ -21,7 +23,6 @@ private:
 	vector<monster_card>card;//怪物的牌組
 	vector<monster_card>throw_card;//怪物氣牌堆
 	monster_card correct_card;
-public:
 	int round_order;//4-3本輪順序(海靜加的)
 	void Set_correct_card(int input);
 	/////////////////////////////////////////////////////////////////////////////////////////////

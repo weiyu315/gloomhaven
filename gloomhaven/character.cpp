@@ -8,7 +8,6 @@ character::character()
 	this->hand_card_amount = 0;
 	this->locate_x = 0;
 	this->locate_y = 0;
-	this->map_name.clear();
 }
 character::character(string newName, int newMax_hp, int newHand_card_amount, int newTotal_card_amount)
 {
