@@ -25,6 +25,7 @@ public:
 
 	bool long_rest = false;
 	int round_dex = 0;//本輪敏捷值
+	int round_order;//4-3本輪順序(海靜加的)
 	int round_hp = 0;//本輪血量
 	bool alive = true;//角色是(true)否(false)存活
 	vector<card> discard_card;//棄牌堆

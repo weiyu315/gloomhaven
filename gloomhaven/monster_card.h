@@ -27,6 +27,7 @@ public:
 	vector<vector<int>> Get_card_action_value();
 	int Get_return_value();
 
+	void output();
 	void rezero();
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,4 +111,45 @@ void monster_card::rezero() {
 	card_action.clear();
 	card_action_value.clear();
 	return_value=0;
+};
+void  monster_card::output() {
+	cout<<card_agility;
+	for (int i = 0; i < card_action.size(); i++) {
+		if (card_action[i] == 0) {
+			cout << " move ";
+
+			for (int j = 0; j < card_action_value[i].size(); j++) {
+				if (card_action_value[i][j] == 0) {
+					cout<<'w';
+				}
+				else if (card_action_value[i][j] == 1) {
+					cout<<'a';
+				}
+				else if (card_action_value[i][j] == 2) {
+					cout<<'s';
+				}
+				else if (card_action_value[i][j] == 3) {
+					cout<<'d';
+				}
+			}
+		}//0為move,1為attack,2為shield,3為heal
+		if (card_action[i] == 1) {
+			cout << " attack ";
+			cout << card_action_value[i][0];
+
+			if (card_action_value[i].size() == 2) {
+				cout << " range ";
+				cout << card_action_value[i][1];
+			}
+		}
+		if (card_action[i] == 2) {
+			cout << " shield ";
+			cout << card_action_value[i][0];
+		}
+		if (card_action[i] == 3) {
+			cout << " heal ";
+			cout << card_action_value[i][0];
+		}
+		//紀錄卡牌動作的值，attack值第二個為range;move w=0 a=1 s=2 d=3
+	}
 };

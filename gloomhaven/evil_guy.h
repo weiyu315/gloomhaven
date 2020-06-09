@@ -1,4 +1,3 @@
-
 #pragma once
 #include<iostream>
 #include"evil_guy.h"
@@ -23,6 +22,7 @@ private:
 	vector<monster_card>throw_card;//怪物氣牌堆
 	monster_card correct_card;
 public:
+	int round_order;//4-3本輪順序(海靜加的)
 	void Set_correct_card(monster_card input);
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	void initialization_bad_guy(string monsters,char monster_char_name,int monster_location_x,int monster_location_y,int monster_status,monster a);//設定怪物初始值
@@ -35,6 +35,7 @@ public:
 	monster_card Get_correct_card();
 	char Get_monster_card_name();
 	void choise_action(int debug_Mode);
+	void output();//4-2輸出技能
 };
 void evil_guy::initialization_bad_guy(string monsters,char monster_char_name , int monster_location_x, int monster_location_y, int monster_status, monster a) {
 	x = monster_location_x;
@@ -85,4 +86,9 @@ void evil_guy::Set_correct_card(monster_card input) {
 };
 monster_card evil_guy::Get_correct_card() {
 	return correct_card;
+};
+void evil_guy::output() {
+	cout << monster_name << " " ;
+	correct_card.output();
+	cout << "\n";
 };
