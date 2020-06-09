@@ -56,6 +56,7 @@ public:
 	bool monster_decide(int x,int y);// 4-1 判斷怪物是否在顯示地圖內
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	bool distant(char character_name,char monster_name,int dist);
+	bool see(int c_x, int c_y, int m_x,int m_y);
 };
 map::map() {
 	hight = 0;
@@ -411,4 +412,26 @@ bool map::monster_decide(int x, int y) {
 	return cout_map[y][x];
 };
 bool map::distant(char character_name, char monster_name, int dist){
+	int m_x=0;
+	int m_y=0;
+	int c_x=0;
+	int c_y=0;
+	for (int i = 0; i < hero_char_name.size(); i++) {
+		if (character_name == hero_char_name[i]) {
+			 c_x=hero_location_x[i];
+			 c_y= hero_location_y[i];
+		}
+	}
+	for (int i = 0; i < monster_char_name.size(); i++) {
+		if (monster_name == monster_char_name[i]) {
+			m_x= monster_location_x[i];
+			m_y= monster_location_y[i];
+		}
+	}
+	see(c_x,c_y,m_x,m_y);
+};
+bool see(int c_x, int c_y, int m_x, int m_y) {
+	int d_x = c_x - m_x;
+	int d_y = c_y - m_y;
+
 };
