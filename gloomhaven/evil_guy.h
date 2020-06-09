@@ -23,7 +23,7 @@ private:
 	monster_card correct_card;
 public:
 	int round_order;//4-3本輪順序(海靜加的)
-	void Set_correct_card(monster_card input);
+	void Set_correct_card(int input);
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	void initialization_bad_guy(string monsters,char monster_char_name,int monster_location_x,int monster_location_y,int monster_status,monster a);//設定怪物初始值
 	void re_zero();//清空資料
@@ -32,7 +32,8 @@ public:
 	string Get_monster_name();
 	int Get_x();
 	int Get_y();
-	monster_card Get_correct_card();
+	int Get_correct_card();
+	int Get_correct_card_agility();
 	char Get_monster_card_name();
 	void choise_action(int debug_Mode);
 	void output();//4-2輸出技能
@@ -81,14 +82,17 @@ void evil_guy::choise_action(int debug_Mode) {
 string evil_guy::Get_monster_name() {
 	return monster_name;
 };
-void evil_guy::Set_correct_card(monster_card input) {
-	correct_card = input;
+void evil_guy::Set_correct_card(int input) {
+	correct_card = card[input];
 };
-monster_card evil_guy::Get_correct_card() {
-	return correct_card;
+int evil_guy::Get_correct_card() {
+	return correct_card.Get_card_number();
 };
 void evil_guy::output() {
 	cout << monster_name << " " ;
 	correct_card.output();
 	cout << "\n";
+};
+int evil_guy::Get_correct_card_agility() {
+	return correct_card.Get_card_agility();
 };
