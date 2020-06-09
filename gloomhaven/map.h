@@ -1,5 +1,7 @@
 #pragma once
 #include<iostream>
+#include <Cmath>
+#include <math.h>
 #include<string>
 #include<vector>
 #include<fstream>
@@ -11,6 +13,7 @@ class map {
 private:
 	vector<vector<int>> original_map;
 	vector<vector<bool>> cout_map;//0為不顯示，1為顯示
+	vector<vector<bool>> attack_map;
 	int hight;
 	int width;
 	int startlocation_x[4];//儲存起始可選擇的位置
@@ -57,6 +60,7 @@ public:
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	bool distant(char character_name,char monster_name,int dist);
 	bool see(int c_x, int c_y, int m_x,int m_y);
+	int attack_range(int c_x, int c_y, int m_x, int m_y,int step);
 };
 map::map() {
 	hight = 0;
@@ -428,10 +432,74 @@ bool map::distant(char character_name, char monster_name, int dist){
 			m_y= monster_location_y[i];
 		}
 	}
-	see(c_x,c_y,m_x,m_y);
+	bool does=see(c_x,c_y,m_x,m_y);
+	if (does == true) {
+		attack_map.clear();
+		vector<bool>save_information;
+			for (int i = 0; i < hight; i++) {
+				for (int j = 0; j < width; j++) {
+					save_information.push_back(0);
+				}
+				attack_map.push_back(save_information);
+				save_information.clear();
+			}
+			if (attack_range(c_x, c_y, m_x, m_y, 0) <= dist|| (attack_range(c_x, c_y, m_x, m_y, 0)==1&&dist==0)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+	}
+	if (does == false) {
+		return 0;
+	}
 };
-bool see(int c_x, int c_y, int m_x, int m_y) {
-	int d_x = c_x - m_x;
-	int d_y = c_y - m_y;
-
+bool map::see(int c_x, int c_y, int m_x, int m_y) {
+	double d_x = c_x - m_x;
+	double d_y = c_y - m_y;
+	d_x = d_x / 200;
+	d_y = d_y / 200;
+	int i;
+	int j=m_y;
+	for (i = m_x; i <= c_x; i=i+d_x) {
+		if (original_map[floor(j)][floor(i)] == 0) {
+			return false;
+		}
+		j = j + d_y;
+	}
+	return true;
+};
+int map::attack_range(int c_x,int c_y,int m_x,int m_y,int range) {
+	int a=100;
+	int b=100;
+	int c=100;
+	int d=100;
+	if (c_x == m_x && c_y == m_y) {
+		return range;
+	}
+	attack_map[c_y][c_x] = 1;
+	if (attack_map[c_y+1][c_x] == 0) {
+		a=attack_range(c_x, c_y+1, m_x, m_y,range+1);
+	}
+	if (attack_map[c_y][c_x+1] == 0) {
+		b=attack_range(c_x+1, c_y, m_x, m_y, range + 1);
+	}
+	if (attack_map[c_y-1][c_x] == 0) {
+		c=attack_range(c_x, c_y-1, m_x, m_y, range + 1);
+	}
+	if (attack_map[c_y][c_x-1] == 0) {
+		d=attack_range(c_x-1, c_y, m_x, m_y, range + 1);
+	}
+	if (a <= b && a <= c && a <= d) {
+		return a;
+	}
+	if (b <= c && b <= d && b <= a) {
+		return b;
+	}
+	if (c <= d && c <= a && c <= b) {
+		return c;
+	}
+	if (d <=a && d <= b&& d <= c) {
+		return d;
+	}
 };
