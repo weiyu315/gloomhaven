@@ -92,6 +92,7 @@ int main(int argc, char* argv[])
 			{
 				n.choose_using_card = false;
 				n.long_rest = false;
+				n.round_shield = 0;
 			}
 			while(true)
 			{
@@ -220,10 +221,22 @@ int main(int argc, char* argv[])
 						playCharacter[i].round_order = playCharacter[j].round_order;
 						playCharacter[j].round_order = c;
 					}
-					if (playCharacter[i].round_dex > playCharacter[j].round_dex&& playCharacter[i].round_order < playCharacter[j].round_order) {
+					if (playCharacter[i].round_dex > playCharacter[j].round_dex && playCharacter[i].round_order < playCharacter[j].round_order) {
 						c = playCharacter[i].round_order;
 						playCharacter[i].round_order = playCharacter[j].round_order;
 						playCharacter[j].round_order = c;
+					}
+					if (playCharacter[i].round_dex == playCharacter[j].round_dex) {
+						if (playCharacter[i].map_name < playCharacter[j].map_name && playCharacter[i].round_order > playCharacter[j].round_order) {
+							c = playCharacter[i].round_order;
+							playCharacter[i].round_order = playCharacter[j].round_order;
+							playCharacter[j].round_order = c;
+						}
+						if (playCharacter[i].map_name > playCharacter[j].map_name&& playCharacter[i].round_order < playCharacter[j].round_order) {
+							c = playCharacter[i].round_order;
+							playCharacter[i].round_order = playCharacter[j].round_order;
+							playCharacter[j].round_order = c;
+						}
 					}
 				}
 			}
@@ -239,10 +252,17 @@ int main(int argc, char* argv[])
 						output_Monster[i].round_order = output_Monster[j].round_order;
 						output_Monster[j].round_order = c;
 					}
-					if (output_Monster[i].Get_correct_card_agility() == output_Monster[j].Get_correct_card_agility() && output_Monster[i].round_order < output_Monster[j].round_order) {
-						c = output_Monster[i].round_order;
-						output_Monster[i].round_order = output_Monster[j].round_order;
-						output_Monster[j].round_order = c;
+					if (output_Monster[i].Get_correct_card_agility() == output_Monster[j].Get_correct_card_agility()) {
+						if (output_Monster[i].Get_monster_card_name() < output_Monster[j].Get_monster_card_name() && output_Monster[i].round_order > output_Monster[j].round_order) {
+							c = output_Monster[i].round_order;
+							output_Monster[i].round_order = output_Monster[j].round_order;
+							output_Monster[j].round_order = c;
+						}
+						if (output_Monster[i].Get_monster_card_name() > output_Monster[j].Get_monster_card_name() && output_Monster[i].round_order < output_Monster[j].round_order) {
+							c = output_Monster[i].round_order;
+							output_Monster[i].round_order = output_Monster[j].round_order;
+							output_Monster[j].round_order = c;
+						}
 					}
 				}
 			}
@@ -262,7 +282,7 @@ int main(int argc, char* argv[])
 			}
 			for (int i = 0; i < ro; i++) {
 				for (int j = 0; j < playCharacter.size(); j++) {
-					if (playCharacter[j].round_order == i) {
+					if (playCharacter[j].round_order == i && playCharacter[j].alive) {
 						cout << playCharacter[j].map_name << " ";
 						if (0 <= playCharacter[j].round_dex && playCharacter[j].round_dex <= 9)
 						{
@@ -272,17 +292,24 @@ int main(int argc, char* argv[])
 						{
 							cout << playCharacter[j].round_dex << " ";
 						}
-						for (int x = 0; x < 2; x++)
+						if (!playCharacter[j].long_rest)
 						{
-							cout << playCharacter[j].using_card[x].number;
-							if (x == 0)
+							for (int x = 0; x < 2; x++)
 							{
-								cout << " ";
+								cout << playCharacter[j].using_card[x].number;
+								if (x == 0)
+								{
+									cout << " ";
+								}
+								else
+								{
+									cout << endl;
+								}
 							}
-							else
-							{
-								cout << endl;
-							}
+						}
+						else
+						{
+							cout << "-1" << endl;
 						}
 					}
 				}
@@ -303,34 +330,122 @@ int main(int argc, char* argv[])
 			}
 			/*-----------------------------------------4-3戰鬥出牌-------------------------------------------*/
 			for (int i = 0; i < playCharacter.size() + output_Monster.size(); i++) {
+				string next_input;
 				for (int j = 0; j < playCharacter.size(); j++) {
 					if (playCharacter[j].round_order == i) {
+						int card_numberTmp;//存5u 12d之類的前面的數字 或是 在長休狀態下要丟棄的牌
+						char up_or_down;//存u或d
+						if (playCharacter[j].alive && !playCharacter[j].long_rest)//若角色活著且非長休狀態
+						{
+							cout << playCharacter[j].map_name << "'s turn: card " << playCharacter[j].using_card[0].number << " " << playCharacter[j].using_card[1].number << endl;
+							cin >> next_input;//輸入3d
+							up_or_down = next_input[next_input.size() - 1];//存d
+							next_input.pop_back();//刪除d
+							card_numberTmp = stoi(next_input);//存3
+							if (playCharacter[j].using_card[0].number != card_numberTmp)//將牌照出牌順序排列
+							{
+								card tmp;
+								tmp = playCharacter[j].using_card[0];
+								playCharacter[j].using_card[0] = playCharacter[j].using_card[1];
+								playCharacter[j].using_card[1] = tmp;
+							}
+							
+							if (up_or_down == 'u')
+							{
+								playCharacter[j].using_card[0].up = true;
+								playCharacter[j].using_card[1].up = false;
+							}
+							else
+							{
+								playCharacter[j].using_card[0].up = false;
+								playCharacter[j].using_card[1].up = true;
+							}
+							char monster_map_name;
+							for (auto m : playCharacter[j].using_card)
+							{
+								if (m.up)
+								{
+									for (auto s : m.skill_above)
+									{
+										switch (s.type)
+										{
+										case 0://attack val
+											cout << "attack monster: ";
+											cin >> monster_map_name;
+											if (monster_map_name != '0')
+											{
+
+											}
+											break;
+										case 1://shield val
+											playCharacter[j].round_shield += s.value;
+											cout << playCharacter[j].map_name << " shield " << s.value << " this turn" << endl;
+											break;
+										case 2://move val
+											cout << "move command: ";
+											break;
+										case 3://heal val
+											if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
+											cout << playCharacter[j].map_name << " heal "<< s.value <<", now hp is " << playCharacter[j].round_hp << endl;
+											break;
+										}
+									}
+								}
+								else
+								{
+									for (auto s : m.skill_below)
+									{
+										switch (s.type)
+										{
+										case 0://attack val
+											cout << "attack monster: ";
+											cin >> monster_map_name;
+											if (monster_map_name != '0')
+											{
+
+											}
+											break;
+										case 1://shield val
+											playCharacter[j].round_shield += s.value;
+											cout << playCharacter[j].map_name << " shield " << s.value << " this turn" << endl;
+											break;
+										case 2://move val
+											cout << "move command: ";
+											break;
+										case 3://heal val
+											if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
+											cout << playCharacter[j].map_name << " heal " << s.value << ", now hp is " << playCharacter[j].round_hp << endl;
+											break;
+										}
+									}
+								}
+							}
+						}
+						else if (playCharacter[j].alive && playCharacter[j].long_rest)//若角色為長休狀態
+						{
+							cout << playCharacter[j].map_name << "'s turn: card -1" << endl;
+							playCharacter[j].round_hp += 2;
+							if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
+							cout << playCharacter[j].map_name << " heal 2, now hp is " << playCharacter[j].round_hp << endl;
+							cout << "remove card: ";
+							cin >> card_numberTmp;
+							for (auto c : playCharacter[j].discard_card)
+							{
+								if (c.number != card_numberTmp)
+								{
+
+								}
+							}
+						}
 					}
 				}
 				for (int j = 0; j < output_Monster.size(); j++) {
 					if (output_Monster[j].round_order == i) {
+						output_Monster[j].Get_correct_card();
 					}
 				}
 			}
-			string next_input;
-			for (auto& n : playCharacter)//每隻角色的每輪動作
-			{
-				int card_numberTmp;//存5u 12d之類的前面的數字
-				char up_or_down;//存u或d
-				if (n.alive && !n.long_rest)
-				{
-					cout << n.map_name << "'s turn: card " << n.using_card[0].number << " " << n.using_card[1].number << endl;
-					cin >> next_input;
-					up_or_down = next_input[next_input.size() - 1];
-					next_input.pop_back();
-					card_numberTmp = stoi(next_input);
-
-				}
-				else if (n.alive && n.long_rest)
-				{
-
-				}
-			}
+			
 			cout << "round " << ++round << ":" << endl;
 		}
 		return 0;

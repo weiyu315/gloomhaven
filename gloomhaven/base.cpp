@@ -64,4 +64,7 @@ card::~card()
 {
 	this->skill_above.clear();
 	this->skill_below.clear();
+	this->dex = -1;
+	this->number = -1;
+	this->up = true;
 }

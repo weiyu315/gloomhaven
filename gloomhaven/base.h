@@ -30,4 +30,6 @@ public:
 	int dex = 0;//±Ó±¶
 	vector<skill> skill_above;
 	vector<skill> skill_below;
+
+	bool up = true;//true¬°up false¬°down
 };
