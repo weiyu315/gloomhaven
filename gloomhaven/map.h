@@ -5,6 +5,7 @@
 #include<fstream>
 #include"monster.h"
 #include"evil_guy.h"
+#include"character.h"
 
 class map {
 private:
@@ -18,6 +19,7 @@ private:
 	int start_point_y;
 	vector<int>hero_location_x;//儲存腳色選擇後的位子
 	vector<int>hero_location_y;
+	vector<int>hero_char_name;
 	/*---------------------------------------------------------------*/
 	vector<int> door_x;//門的位置
 	vector<int> door_y;
@@ -52,6 +54,8 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	bool monster_decide(int x,int y);// 4-1 判斷怪物是否在顯示地圖內
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	bool distant(char character_name,char monster_name,int dist);
 };
 map::map() {
 	hight = 0;
@@ -61,35 +65,47 @@ map::map() {
 };
 map::map(string file_map) {
 	fstream file;
+	string map_input;
 	string n;//放file輸出的暫存器
 	int front, back;//放兩個同時輸入的int
 	int one, two, three;//輸入兩個、三個、或四個人時的等級
 	int time;
-
-	file.open(file_map, ios::in);
-	if (!file) {
-		cout << "找不到地圖" << "\n";
-	}
-	else {
-		file >> front >> back;
-		Set_map_size(front,back);
-		for (int i = 0; i < hight; i++) {
-			file >> n;
-			Set_map(n);
+	int a = 0;
+	while (1) {
+		if (a == 0) {
+			map_input = file_map;
 		}
-		for (int i = 0; i < 4; i++) {
-			file >> front >> back;//front為x值，back為y值
-			Set_startlocation(front, back, i);
+		else {
+			cin >> map_input;
 		}
-		initalization_map(startlocation_x[0],startlocation_y[0]);
-		file >> time;//輸入次數
-			for(int i = 0; i < time;i++) {
-			file >> n >> front >> back >> one >> two >> three;
-			Set_monster_information(n,front,back, one, two,three,i);
+		a++;
+		file.open(map_input, ios::in);
+		if (!file) {
+			cout << "找不到地圖" << "\n";
 		}
-	}
-	file.close();
-};
+		else {
+			file >> front >> back;
+			Set_map_size(front, back);
+			for (int i = 0; i < hight; i++) {
+				file >> n;
+				Set_map(n);
+			}
+			for (int i = 0; i < 4; i++) {
+				file >> front >> back;//front為x值，back為y值
+				Set_startlocation(front, back, i);
+			}
+			initalization_map(startlocation_x[0], startlocation_y[0]);
+			file >> time;//輸入次數
+			for (int i = 0; i < time; i++) {
+				file >> n >> front >> back >> one >> two >> three;
+				Set_monster_information(n, front, back, one, two, three, i);
+			}
+			file.close();
+			return;
+		}
+		file.close();
+	};
+}
 bool map::Set_start_point() {
 	string move;//移動指令
 	cin >> move;
@@ -169,6 +185,7 @@ bool map::Set_start_point() {
 			return 0;
 		}
 	}
+	hero_char_name.push_back('A' + hero_char_name.size() );
 	hero_location_x.push_back(start_point_x);
 	hero_location_y.push_back(start_point_y);
 	return 1;
@@ -361,7 +378,8 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 				else {
 					for (int j = 0; j < hero_location_x.size(); j++) {
 						if (x == hero_location_x[j] && y == hero_location_y[j]) {
-							return 'A' + j;
+							
+							return hero_char_name[j];
 						}
 					}
 				}
@@ -378,7 +396,7 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 	if (level == 1) {
 		for (int j = 0; j < hero_location_x.size(); j++) {
 			if (x == hero_location_x[j] && y == hero_location_y[j]) {
-				return 'A' + j;
+				return hero_char_name[j];
 			}
 		}
 		for (int i = 0; i < Monster.size(); i++) {
@@ -391,4 +409,6 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 };
 bool map::monster_decide(int x, int y) {
 	return cout_map[y][x];
+};
+bool map::distant(char character_name, char monster_name, int dist){
 };
