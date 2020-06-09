@@ -61,6 +61,7 @@ public:
 	bool distant(char character_name,char monster_name,int dist);
 	bool see(int c_x, int c_y, int m_x,int m_y);
 	int attack_range(int c_x, int c_y, int m_x, int m_y,int step);
+	void move(char c_name,int wafe, vector<evil_guy> Monster);
 };
 map::map() {
 	hight = 0;
@@ -501,5 +502,74 @@ int map::attack_range(int c_x,int c_y,int m_x,int m_y,int range) {
 	}
 	if (d <=a && d <= b&& d <= c) {
 		return d;
+	}
+};
+void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
+	string wave;
+	bool ture=true;
+	int x;
+	int y;
+		while (ture == true) {
+			cin >> wave;
+			ture = false;
+			if (wave.size()>wafe) {
+				ture = true;
+			}
+			for (int i = 0; i < wave.size(); i++) {
+				if (wave[i] != 'w' && wave[i] != 'a' && wave[i] != 's' && wave[i] != 'd') {
+					if (wave[i] == 'e' && wave.size() == 1) {
+
+					}
+					else {
+						ture = true;
+					}
+				}
+			}
+			for (int i = 0; i < hero_char_name.size(); i++) {
+				if (hero_char_name[i] == c_name) {
+					x = hero_location_x[i];
+					y = hero_location_y[i];
+				}
+			}
+			////////////////////////////////
+			for (int i = 0; i < wave.size(); i++) {
+				if (wave[i] == 'w') {
+					y--;
+				}
+				if (wave[i] == 'a') {
+					x--;
+				}
+				if (wave[i] == 's') {
+					y++;
+				}
+				if (wave[i] == 'd') {
+					x++;
+				}
+				for (int s = 0; s < Monster.size(); s++) {
+					if (Monster[s].Get_x()==x&& Monster[s].Get_y()==y) {
+						ture = true;
+					}
+				}
+				if (i == wave.size() - 1) {
+					for (int s = 0; s < hero_char_name.size(); s++) {
+						if (hero_location_x[s] == x && hero_location_y[s] == y&&c_name!=hero_char_name[i]) {
+							ture = true;
+						}
+					}
+				}
+				if (original_map[y][x] == 0 || original_map[y][x] == 2) {
+					ture= true;
+					break;
+				}
+			}
+			if (ture == true) {
+				cout << "error move\n";
+			}
+		}
+	for (int i = 0; i < hero_char_name.size(); i++) {
+		if (hero_char_name[i] == c_name) {
+			hero_location_x[i] = x;
+			hero_location_y[i] = y;
+		}
 	}
 };
