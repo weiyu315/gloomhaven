@@ -26,6 +26,8 @@ public:
 	bool long_rest = false;
 	int round_dex = 0;//本輪敏捷值
 	int round_hp = 0;//本輪血量
+	int round_shield = 0;//本輪護甲值
 	bool alive = true;//角色是(true)否(false)存活
+	bool choose_using_card = false;//角色是(true)否(false)已選擇要出的牌
 	vector<card> discard_card;//棄牌堆
 };
