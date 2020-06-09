@@ -97,16 +97,7 @@ int main(int argc, char* argv[])
 			int playCharacter_amount = playCharacter.size();
 			while(true)
 			{
-				for (auto n : playCharacter)
-				{
-					cout << n.choose_using_card << " " << n.long_rest << endl;
-					if (n.long_rest || n.choose_using_card)
-					{
-						map_name_finish = true;
-						continue;
-					}
-					map_name_finish = false;
-				}
+				if (playCharacter_amount <= 0) { break; }
 				int k = 0;
 				bool map_name = true;
 				if (map_name_finish)
@@ -138,10 +129,36 @@ int main(int argc, char* argv[])
 							{
 								playCharacter[k].round_dex = 99;
 								playCharacter[k].long_rest = true;
+								playCharacter_amount--;
 							}
 						}
 						else if (action == "check")
 						{
+							card tmp;
+							for (int z = 0; z < playCharacter[k].hand_card.size(); z++)
+							{
+								for (int y = z + 1; y < playCharacter[k].hand_card.size(); y++)
+								{
+									if (playCharacter[k].hand_card[z].number > playCharacter[k].hand_card[y].number)
+									{
+										tmp = playCharacter[k].hand_card[z];
+										playCharacter[k].hand_card[z] = playCharacter[k].hand_card[y];
+										playCharacter[k].hand_card[y] = tmp;
+									}
+								}
+							}
+							for (int z = 0; z < playCharacter[k].discard_card.size(); z++)
+							{
+								for (int y = z + 1; y < playCharacter[k].discard_card.size(); y++)
+								{
+									if (playCharacter[k].discard_card[z].number > playCharacter[k].discard_card[y].number)
+									{
+										tmp = playCharacter[k].discard_card[z];
+										playCharacter[k].discard_card[z] = playCharacter[k].discard_card[y];
+										playCharacter[k].discard_card[y] = tmp;
+									}
+								}
+							}
 							cout << "hand: ";
 							for (auto n : playCharacter[k].hand_card)
 							{
@@ -169,16 +186,17 @@ int main(int argc, char* argv[])
 						{
 							playCharacter[k].choose_using_card = true;
 							using_card_number = stoi(action);
+							bool using_card_number_exist = true;
 							for (int j = 0; j < 2; j++)
 							{
-								playCharacter[k].setUsing_card(j, using_card_number, playCharacter[k].using_card, playCharacter[k].hand_card);
+								using_card_number_exist = playCharacter[k].setUsing_card(j, using_card_number, playCharacter[k].using_card, playCharacter[k].hand_card);
 								if (j != 1)
 								{
 									cin >> using_card_number;
 								}
 							}
 							playCharacter[k].round_dex = playCharacter[k].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
-
+							if (using_card_number_exist) { playCharacter_amount--; }
 						}
 					}
 					else
@@ -423,6 +441,14 @@ int main(int argc, char* argv[])
 											cout << playCharacter[j].map_name << " heal " << s.value << ", now hp is " << playCharacter[j].round_hp << endl;
 											break;
 										}
+									}
+								}
+								playCharacter[j].discard_card.emplace_back(m);
+								for (int x = 0; x < playCharacter[j].hand_card.size(); x++)
+								{
+									if (playCharacter[j].hand_card[x].number == m.number)
+									{
+										playCharacter[j].hand_card.erase(playCharacter[j].hand_card.begin() + x);
 									}
 								}
 							}

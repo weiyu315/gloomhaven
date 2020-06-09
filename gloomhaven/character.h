@@ -17,7 +17,7 @@ public:
 	int hand_card_amount = 0;//可選用卡牌數
 
 	card using_card[2] = {};//正在使用的兩張牌
-	void setUsing_card(int index, int newUsing_card_number, card newUsing_card[2], vector<card> newHand_card);
+	bool setUsing_card(int index, int newUsing_card_number, card newUsing_card[2], vector<card> newHand_card);
 
 	int locate_x = 0;
 	int locate_y = 0;
