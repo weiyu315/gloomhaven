@@ -131,6 +131,7 @@ int main(int argc, char* argv[])
 							{
 								playCharacter[k].round_dex = 99;
 								playCharacter[k].long_rest = true;
+								playCharacter[k].choose_using_card = false;
 								playCharacter_amount--;
 							}
 						}
@@ -179,6 +180,7 @@ int main(int argc, char* argv[])
 						}
 						else
 						{
+							playCharacter[k].long_rest = false;
 							playCharacter[k].choose_using_card = true;
 							using_card_number = stoi(action);
 							bool using_card_number_exist = true;
@@ -192,7 +194,6 @@ int main(int argc, char* argv[])
 								if (!using_card_number_exist)
 								{
 									goto re_input;
-									cout << "123" << endl;
 								}
 							}
 							playCharacter_amount--; 
@@ -601,6 +602,7 @@ int main(int argc, char* argv[])
 								{
 									c.discard = false;
 								}
+								//cout << c.number << " " << c.discard << endl;
 							}
 						}
 					}
