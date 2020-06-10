@@ -31,5 +31,7 @@ public:
 	vector<skill> skill_above;
 	vector<skill> skill_below;
 
+	bool discard = false;//true為棄牌 false為手牌
+	bool remove = false;//true為從棄牌堆中移除的一張牌 false則不是
 	bool up = true;//true為up false為down
 };

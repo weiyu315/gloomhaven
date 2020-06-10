@@ -85,6 +85,13 @@ int main(int argc, char* argv[])
 		string first_input, action;
 		cout << "round " << ++round << ":" << endl;
 		bool map_name_finish = false;
+		for (auto n : playCharacter)
+		{
+			for (auto m : n.hand_card)
+			{
+				m.discard = false;
+			}
+		}
 		while (!end_round)
 		{
 			/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
@@ -121,7 +128,7 @@ int main(int argc, char* argv[])
 						cin >> action;
 						if (action == "-1")
 						{
-							if (playCharacter[k].discard_card.size() < 2)
+							if (playCharacter[k].discard_card_amount < 2)
 							{
 								cout << "Your discard amount is lower than 2, so you can't use long rest." << endl;
 							}
@@ -147,37 +154,31 @@ int main(int argc, char* argv[])
 									}
 								}
 							}
-							for (int z = 0; z < playCharacter[k].discard_card.size(); z++)
-							{
-								for (int y = z + 1; y < playCharacter[k].discard_card.size(); y++)
-								{
-									if (playCharacter[k].discard_card[z].number > playCharacter[k].discard_card[y].number)
-									{
-										tmp = playCharacter[k].discard_card[z];
-										playCharacter[k].discard_card[z] = playCharacter[k].discard_card[y];
-										playCharacter[k].discard_card[y] = tmp;
-									}
-								}
-							}
 							cout << "hand: ";
 							for (auto n : playCharacter[k].hand_card)
 							{
-								cout << n.number;
-								if (n.number != playCharacter[k].hand_card[playCharacter[k].hand_card.size() - 1].number)
+								if (!n.discard && !n.remove)
 								{
-									cout << ", ";
-								}
-								else
-								{
-									cout << "; discard: ";
+									cout << n.number;
+									if (n.number != playCharacter[k].hand_card[playCharacter[k].hand_card.size() - 1].number)
+									{
+										cout << ", ";
+									}
 								}
 							}
-							for (auto m : playCharacter[k].discard_card)
+							cout << "; discard: ";
+							for (int m = 0; m < playCharacter[k].discard_card_amount; m++)
 							{
-								cout << m.number;
-								if (m.number != playCharacter[k].discard_card[playCharacter[k].discard_card.size() - 1].number)
+								if (playCharacter[k].hand_card[m].discard && !playCharacter[k].hand_card[m].remove)
 								{
-									cout << ", ";
+									cout << playCharacter[k].hand_card[m].number;
+									for (int n = m + 1; n < playCharacter[k].discard_card_amount; n++)
+									{
+										if (playCharacter[k].hand_card[n].discard)
+										{
+											cout << ", ";
+										}
+									}
 								}
 							}
 							cout << endl;
@@ -474,7 +475,6 @@ int main(int argc, char* argv[])
 											cout << playCharacter[j].map_name << " shield " << s.value << " this turn" << endl;
 											break;
 										case 2://move val
-											
 											Map.move(playCharacter[j].map_name, s.value, Monster);
 											Map.output(Monster);
 											break;
@@ -485,12 +485,11 @@ int main(int argc, char* argv[])
 										}
 									}
 								}
-								playCharacter[j].discard_card.emplace_back(m);
 								for (int x = 0; x < playCharacter[j].hand_card.size(); x++)
 								{
 									if (playCharacter[j].hand_card[x].number == m.number)
 									{
-										playCharacter[j].hand_card.erase(playCharacter[j].hand_card.begin() + x);
+										playCharacter[j].hand_card[x].discard = true;
 									}
 								}
 							}
@@ -503,11 +502,15 @@ int main(int argc, char* argv[])
 							cout << playCharacter[j].map_name << " heal 2, now hp is " << playCharacter[j].round_hp << endl;
 							cout << "remove card: ";
 							cin >> card_numberTmp;
-							for (auto c : playCharacter[j].discard_card)
+							for (auto c : playCharacter[j].hand_card)
 							{
-								if (c.number != card_numberTmp)
+								if (c.number == card_numberTmp)
 								{
-
+									c.remove = true;
+								}
+								else
+								{
+									c.discard = false;
 								}
 							}
 						}
