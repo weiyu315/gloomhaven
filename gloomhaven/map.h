@@ -50,7 +50,7 @@ public:
 	void output_decide_map(vector<evil_guy> Monster);
 	void output(vector<evil_guy> Monster);
 	char output_point_map(int x,int y,vector<evil_guy> Monster,int level);//level 0表示為選擇狀態，level1表示為正常
-	void monster__action(evil_guy Monster,vector<character> play, vector<evil_guy> Monster_all);
+	void monster__action(evil_guy &Monster,vector<character> &play, vector<evil_guy> &Monster_all);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	bool monster_decide(int x,int y);// 4-1 判斷怪物是否在顯示地圖內
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -589,7 +589,7 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 		}
 	}
 };
-void map::monster__action(evil_guy Monster, vector<character> play, vector<evil_guy> Monster_all) {
+void map::monster__action(evil_guy &Monster, vector<character> &play, vector<evil_guy> &Monster_all) {
 	vector<int>monster_act= Monster.correct_card.Get_card_action();
 	vector<vector<int>> monster_act_value= Monster.correct_card.Get_card_action_value();
 	bool ture = false;
@@ -600,7 +600,7 @@ void map::monster__action(evil_guy Monster, vector<character> play, vector<evil_
 		if (monster_act[i] == 0) {
 			j = 0;
 			ture = false;
-			while (ture = false) {
+			while (ture == false) {
 					if (monster_act_value[i][j] == 0) {
 						if (original_map[Monster.y - 1][Monster.x] == 2 || original_map[Monster.y - 1][Monster.x] == 0 || original_map[Monster.y - 1][Monster.x] == 3) {
 							ture = true;
@@ -668,12 +668,17 @@ void map::monster__action(evil_guy Monster, vector<character> play, vector<evil_
 						j++;
 					}
 			}
+			for (int h = 0; h < Monster_all.size(); h++) {
+				if (Monster_all[h].monster_card_name == Monster.monster_card_name) {
+					Monster_all[h] = Monster;
+				};
+			}
 			output(Monster_all);
 		}
 
 		if (monster_act[i] == 1) {
 			for (int s = 0; s < play.size(); s++) {
-				if (distant(play[s].map_name,Monster.monster_card_name, monster_act_value[i][1])) {
+				if (distant(play[s].map_name,Monster.monster_card_name, monster_act_value[i][1]+Monster.monster_range)) {
 					for (z = 0; z < hero_char_name.size(); z++) {
 						if (hero_char_name[z] == play[s].map_name) {
 							cout << Monster.monster_card_name << " lock " << play[s].map_name << " in distance " << attack_range(hero_location_x[z],hero_location_y[z],Monster.x,Monster.y, 0);
