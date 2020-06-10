@@ -90,14 +90,15 @@ re_play:;
 		bool map_name_finish = false;
 		while (!end_round)
 		{
+			cout << "re 00000000000000" << endl;
 			/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
-			for (auto n : playCharacter)
+			for (auto& n : playCharacter)
 			{
 				n.choose_using_card = false;
 				n.long_rest = false;
 				n.round_shield = 0;
 			}
-			for (auto n : Monster)
+			for (auto& n : Monster)
 			{
 				n.monster_current_shield = 0;
 			}
@@ -157,7 +158,7 @@ re_play:;
 								}
 							}
 							cout << "hand: ";
-							for (auto n : playCharacter[k].hand_card)
+							for (auto& n : playCharacter[k].hand_card)
 							{
 								if (!n.discard && !n.remove)
 								{
@@ -228,6 +229,10 @@ re_play:;
 					{
 						cout << playCharacter[k].map_name << " is killed!!" << endl;
 					}
+				}
+				else if (first_input == "exist")
+				{
+					return 0;
 				}
 			}
 			/*-----------------------------------------怪物選牌-------------------------------------------*/
@@ -452,14 +457,14 @@ re_play:;
 										}
 									}
 								}
-								for (auto n : playCharacter)
+								for (auto& n : playCharacter)
 								{
 									if (n.alive)
 									{
 										cout << n.map_name << "-hp: " << n.round_hp << ", shield: " << n.round_shield << endl;
 									}
 								}
-								for (auto n : Monster)
+								for (auto& n : Monster)
 								{
 									if (n.monster_current_hp > 0)
 									{
@@ -497,11 +502,11 @@ re_play:;
 									goto restart;
 								}
 								char monster_map_name;
-								for (auto m : playCharacter[j].using_card)
+								for (auto &m : playCharacter[j].using_card)
 								{
 									if (m.up)
 									{
-										for (auto s : m.skill_above)
+										for (auto &s : m.skill_above)
 										{
 											switch (s.type)
 											{
@@ -579,7 +584,7 @@ re_play:;
 									}
 									else
 									{
-										for (auto s : m.skill_below)
+										for (auto &s : m.skill_below)
 										{
 											switch (s.type)
 											{
