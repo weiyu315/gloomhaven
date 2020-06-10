@@ -677,8 +677,10 @@ void map::monster__action(evil_guy &Monster, vector<character> &play, vector<evi
 		}
 
 		if (monster_act[i] == 1) {
+			bool uy = false;
 			for (int s = 0; s < play.size(); s++) {
 				if (distant(play[s].map_name,Monster.monster_card_name, monster_act_value[i][1]+Monster.monster_range)) {
+					uy = true;
 					for (z = 0; z < hero_char_name.size(); z++) {
 						if (hero_char_name[z] == play[s].map_name) {
 							cout << Monster.monster_card_name << " lock " << play[s].map_name << " in distance " << attack_range(hero_location_x[z], hero_location_y[z], Monster.x, Monster.y, 0) << endl;
@@ -690,10 +692,11 @@ void map::monster__action(evil_guy &Monster, vector<character> &play, vector<evi
 					cout << Monster.monster_card_name<<" attack "<< play[s].map_name<<" "<< monster_act_value[i][0] <<" damage, "<<play[s].map_name+ Monster.monster_attack <<" shield "<<play[s].round_shield<<", "<< play[s].map_name<<" remain "<< play[s].round_hp<<" hp\n";
 					break;
 				}
-				else {
-					cout << "no one lock\n";
-				}
+				
 			}
+		if(uy==false) {
+			cout << "no one lock\n";
+		}
 		}
 		if (monster_act[i] == 2) {
 			cout << Monster.monster_card_name << " shield " << monster_act_value[i][0] << "this turn\n";
@@ -708,17 +711,18 @@ void map::monster__action(evil_guy &Monster, vector<character> &play, vector<evi
 		}
 	}
 	for (int i = 0; i < Monster_all.size(); i++) {
-		Monster_all[i].monster_card_name == Monster.monster_card_name;
-		for (int j = 0; j < Monster_all[i].card.size(); j++) {
-			if (Monster_all[i].card[j].Get_card_number()==Monster_all[i].correct_card.Get_card_number()) {
-				if (Monster_all[i].card[j].Get_return_value() == 0) {
-					Monster_all[i].throw_card.push_back(Monster_all[i].card[j]);
-					Monster_all[i].card.erase(Monster_all[i].card.begin() + j);
-				}
-				if (Monster_all[i].card[j].Get_return_value() == 1) {
-					while (Monster_all[i].throw_card.size()>0) {
-						Monster_all[i].card.push_back(Monster_all[i].throw_card[0]);
-						Monster_all[i].throw_card.erase(Monster_all[i].throw_card.begin());
+		if (Monster_all[i].monster_card_name == Monster.monster_card_name) {
+			for (int j = 0; j < Monster_all[i].card.size(); j++) {
+				if (Monster_all[i].card[j].Get_card_number() == Monster_all[i].correct_card.Get_card_number()) {
+					if (Monster_all[i].card[j].Get_return_value() == 0) {
+						Monster_all[i].throw_card.push_back(Monster_all[i].card[j]);
+						Monster_all[i].card.erase(Monster_all[i].card.begin() + j);
+					}
+					else if (Monster_all[i].card[j].Get_return_value() == 1) {
+						while (Monster_all[i].throw_card.size() > 0) {
+							Monster_all[i].card.push_back(Monster_all[i].throw_card[0]);
+							Monster_all[i].throw_card.erase(Monster_all[i].throw_card.begin());
+						}
 					}
 				}
 			}
