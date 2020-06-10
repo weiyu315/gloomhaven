@@ -86,13 +86,6 @@ int main(int argc, char* argv[])
 		string first_input, action;
 		cout << "round " << ++round << ":" << endl;
 		bool map_name_finish = false;
-		for (auto n : playCharacter)
-		{
-			for (auto m : n.hand_card)
-			{
-				m.discard = false;
-			}
-		}
 		while (!end_round)
 		{
 			/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
@@ -169,17 +162,16 @@ int main(int argc, char* argv[])
 								}
 							}
 							cout << "; discard: ";
-							for (int m = 0; m < playCharacter[k].discard_card_amount; m++)
+							int amountTmp = 0;
+							for (int m = 0; m < playCharacter[k].hand_card.size(); m++)
 							{
 								if (playCharacter[k].hand_card[m].discard && !playCharacter[k].hand_card[m].remove)
 								{
 									cout << playCharacter[k].hand_card[m].number;
-									for (int n = m + 1; n < playCharacter[k].discard_card_amount; n++)
+									amountTmp++;
+									if (amountTmp < playCharacter[k].discard_card_amount)
 									{
-										if (playCharacter[k].hand_card[n].discard)
-										{
-											cout << ", ";
-										}
+										cout << ", ";
 									}
 								}
 							}
@@ -574,6 +566,7 @@ int main(int argc, char* argv[])
 										if (playCharacter[j].hand_card[x].number == m.number)
 										{
 											playCharacter[j].hand_card[x].discard = true;
+											playCharacter[j].discard_card_amount++;
 										}
 									}
 								}
