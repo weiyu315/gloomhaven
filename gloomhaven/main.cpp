@@ -16,6 +16,8 @@ int main(int argc, char* argv[])
 {
 	vector<character> Character;//角色資料庫
 	string play_or_exit;
+	cout << "輸入play開始遊玩或exit離開" << endl;
+re_play:;
 	cin >> play_or_exit;
 	if (play_or_exit == "play")
 	{
@@ -96,7 +98,7 @@ int main(int argc, char* argv[])
 				n.round_shield = 0;
 			}
 			int playCharacter_amount = playCharacter.size();
-			while (true)
+			while(true)
 			{
 				if (playCharacter_amount <= 0) { break; }
 				int k = 0;
@@ -158,7 +160,24 @@ int main(int argc, char* argv[])
 									cout << n.number;
 									if (n.number != playCharacter[k].hand_card[playCharacter[k].hand_card.size() - 1].number)
 									{
-										cout << ", ";
+										bool space = true;
+										for (int i = 0; i < playCharacter[k].hand_card.size(); i++)
+										{
+											if (playCharacter[k].hand_card[i].number == n.number)
+											{
+												for (int j = i + 1; j < playCharacter[k].hand_card.size(); j++)
+												{
+													if (!playCharacter[k].hand_card[j].discard)
+													{
+														space = true;
+														break;
+													}
+													space = false;
+												}
+												break;
+											}
+										}
+										if (space) { cout << ", "; }
 									}
 								}
 							}
@@ -196,9 +215,9 @@ int main(int argc, char* argv[])
 									goto re_input;
 								}
 							}
-							playCharacter_amount--;
+							playCharacter_amount--; 
 							playCharacter[k].round_dex = playCharacter[k].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
-
+							
 						}
 					}
 					else
@@ -254,7 +273,7 @@ int main(int argc, char* argv[])
 							playCharacter[i].round_order = playCharacter[j].round_order;
 							playCharacter[j].round_order = c;
 						}
-						if (playCharacter[i].map_name > playCharacter[j].map_name && playCharacter[i].round_order < playCharacter[j].round_order) {
+						if (playCharacter[i].map_name > playCharacter[j].map_name&& playCharacter[i].round_order < playCharacter[j].round_order) {
 							c = playCharacter[i].round_order;
 							playCharacter[i].round_order = playCharacter[j].round_order;
 							playCharacter[j].round_order = c;
@@ -354,7 +373,7 @@ int main(int argc, char* argv[])
 			for (int i = 0; i < playCharacter.size() + output_Monster.size(); i++) {
 				string next_input;
 				for (int j = 0; j < playCharacter.size(); j++) {
-					if (playCharacter[j].round_order == i) {
+					if (playCharacter[j].round_order == i)  {
 						int card_numberTmp;//存5u 12d之類的前面的數字 或是 在長休狀態下要丟棄的牌
 						char up_or_down;//存u或d
 						if (playCharacter[j].alive && !playCharacter[j].long_rest && playCharacter[j].choose_using_card)//若角色活著且非長休狀態
@@ -469,7 +488,7 @@ int main(int argc, char* argv[])
 																			output_Monster.erase(output_Monster.begin() + c);
 																		}
 																	}
-																	Monster.erase(Monster.begin() + b);
+																	Monster.erase(Monster.begin()+b);
 																}
 																goto to_break_u;
 															}
@@ -586,20 +605,20 @@ int main(int argc, char* argv[])
 						}
 						else if (playCharacter[j].alive && playCharacter[j].long_rest)//若角色為長休狀態
 						{
+							playCharacter[j].discard_card_amount = 0;
 							cout << playCharacter[j].map_name << "'s turn: card -1" << endl;
 							playCharacter[j].round_hp += 2;
 							if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
 							cout << playCharacter[j].map_name << " heal 2, now hp is " << playCharacter[j].round_hp << endl;
 							cout << "remove card: ";
 							cin >> card_numberTmp;
-							for (auto c : playCharacter[j].hand_card)
+							for (auto& c : playCharacter[j].hand_card)
 							{
 								if (c.number == card_numberTmp)
 								{
 									c.remove = true;
 								}
 								c.discard = false;
-								cout << " here " << c.number << " " << c.discard << endl;
 							}
 						}
 					}
@@ -626,10 +645,19 @@ int main(int argc, char* argv[])
 					}
 				}
 			}
-
+			
 			cout << "round " << ++round << ":" << endl;
 		}
 		return 0;
+	}
+	else if (play_or_exit == "exit")
+	{
+	return 0;
+	}
+	else
+	{
+		cout << "輸入錯誤 請輸入play或exit" << endl;
+		goto re_play;
 	}
 }
 void characterFileReader(string fileName, vector<character>& Character)
