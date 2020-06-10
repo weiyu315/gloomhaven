@@ -469,7 +469,6 @@ int main(int argc, char* argv[])
 																		}
 																	}
 																	Monster.erase(Monster.begin()+b);
-			
 																}
 																goto to_break_u;
 															}
@@ -541,13 +540,13 @@ int main(int argc, char* argv[])
 																cout << playCharacter[j].map_name << " attack " << Monster[b].Get_monster_card_name() << " " << damage << " damage, " << Monster[b].Get_monster_card_name() << " shield " << Monster[b].monster_current_shield << ", " << Monster[b].Get_monster_card_name() << " remain " << Monster[b].monster_current_hp << " hp" << endl;
 																if (!Monster[b].live_or_die)
 																{
-																		cout << Monster[b].Get_monster_card_name() << " is killed!!" << endl;
-																		for (int c = 0; c < output_Monster.size(); c++) {
-																			if (output_Monster[c].Get_monster_card_name() == Monster[b].Get_monster_card_name()) {
-																				output_Monster.erase(output_Monster.begin() + c);
-																			}
+																	cout << Monster[b].Get_monster_card_name() << " is killed!!" << endl;
+																	for (int c = 0; c < output_Monster.size(); c++) {
+																		if (output_Monster[c].Get_monster_card_name() == Monster[b].Get_monster_card_name()) {
+																			output_Monster.erase(output_Monster.begin() + c);
 																		}
-																		Monster.erase(Monster.begin() + b);
+																	}
+																	Monster.erase(Monster.begin() + b);
 																}
 																goto to_break_d;
 															}
@@ -609,7 +608,10 @@ int main(int argc, char* argv[])
 				for (int j = 0; j < output_Monster.size(); j++) {
 					if (output_Monster[j].round_order == i) {
 						for (int k = 0; k < Monster.size(); k++) {
-							
+							if (Monster[k].monster_card_name == output_Monster[j].monster_card_name) {
+								Monster[k].correct_card = output_Monster[j].correct_card;
+								Monster[k].correct_card;
+							}
 						}
 					}
 				}
@@ -624,6 +626,7 @@ int main(int argc, char* argv[])
 					}
 				}
 			}
+			
 			cout << "round " << ++round << ":" << endl;
 		}
 		return 0;
