@@ -158,7 +158,24 @@ int main(int argc, char* argv[])
 									cout << n.number;
 									if (n.number != playCharacter[k].hand_card[playCharacter[k].hand_card.size() - 1].number)
 									{
-										cout << ", ";
+										bool space = true;
+										for (int i = 0; i < playCharacter[k].hand_card.size(); i++)
+										{
+											if (playCharacter[k].hand_card[i].number == n.number)
+											{
+												for (int j = i + 1; j < playCharacter[k].hand_card.size(); j++)
+												{
+													if (!playCharacter[k].hand_card[j].discard)
+													{
+														space = true;
+														break;
+													}
+													space = false;
+												}
+												break;
+											}
+										}
+										if (space) { cout << ", "; }
 									}
 								}
 							}
@@ -586,23 +603,20 @@ int main(int argc, char* argv[])
 						}
 						else if (playCharacter[j].alive && playCharacter[j].long_rest)//­Y¨¤¦â¬°ªø¥ðª¬ºA
 						{
+							playCharacter[j].discard_card_amount = 0;
 							cout << playCharacter[j].map_name << "'s turn: card -1" << endl;
 							playCharacter[j].round_hp += 2;
 							if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
 							cout << playCharacter[j].map_name << " heal 2, now hp is " << playCharacter[j].round_hp << endl;
 							cout << "remove card: ";
 							cin >> card_numberTmp;
-							for (auto c : playCharacter[j].hand_card)
+							for (auto& c : playCharacter[j].hand_card)
 							{
 								if (c.number == card_numberTmp)
 								{
 									c.remove = true;
 								}
-								else
-								{
-									c.discard = false;
-								}
-								//cout << c.number << " " << c.discard << endl;
+								c.discard = false;
 							}
 						}
 					}
