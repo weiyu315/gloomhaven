@@ -11,7 +11,7 @@
 class evil_guy {
 
 public:
-	bool live_or_die;
+	bool live_or_die = true;
 	string monster_name;
 	char monster_card_name;
 	int monster_max_hp;//怪物的最大生命值
