@@ -710,7 +710,7 @@ void map::monster__action(evil_guy &Monster, vector<character> &play, vector<evi
 	for (int i = 0; i < Monster_all.size(); i++) {
 		Monster_all[i].monster_card_name == Monster.monster_card_name;
 		for (int j = 0; j < Monster_all[i].card.size(); j++) {
-			if (Monster_all[i].card[j].Get_card_number==Monster_all[i].correct_card.Get_card_number) {
+			if (Monster_all[i].card[j].Get_card_number()==Monster_all[i].correct_card.Get_card_number()) {
 				if (Monster_all[i].card[j].Get_return_value() == 0) {
 					Monster_all[i].throw_card.push_back(Monster_all[i].card[j]);
 					Monster_all[i].card.erase(Monster_all[i].card.begin() + j);
