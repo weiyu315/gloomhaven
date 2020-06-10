@@ -16,6 +16,8 @@ int main(int argc, char* argv[])
 {
 	vector<character> Character;//角色資料庫
 	string play_or_exit;
+	cout << "輸入play開始遊玩或exit離開" << endl;
+re_play:;
 	cin >> play_or_exit;
 	if (play_or_exit == "play")
 	{
@@ -646,6 +648,15 @@ int main(int argc, char* argv[])
 			cout << "round " << ++round << ":" << endl;
 		}
 		return 0;
+	}
+	else if (play_or_exit == "exit")
+	{
+	return 0;
+	}
+	else
+	{
+		cout << "輸入錯誤 請輸入play或exit" << endl;
+		goto re_play;
 	}
 }
 void characterFileReader(string fileName, vector<character>& Character)
