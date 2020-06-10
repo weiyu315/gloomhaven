@@ -684,10 +684,10 @@ void map::monster__action(evil_guy &Monster, vector<character> &play, vector<evi
 							cout << Monster.monster_card_name << " lock " << play[s].map_name << " in distance " << attack_range(hero_location_x[z], hero_location_y[z], Monster.x, Monster.y, 0) << endl;
 						}
 					}
-					if (play[s].round_shield < monster_act_value[i][0]) {
-						play[s].round_hp = play[s].round_hp + play[s].round_shield - monster_act_value[i][0];
+					if (play[s].round_shield < monster_act_value[i][0] + Monster.monster_attack) {
+						play[s].round_hp = play[s].round_hp + play[s].round_shield - monster_act_value[i][0]- Monster.monster_attack;
 					}
-					cout << Monster.monster_card_name<<" attack "<< play[s].map_name<<" "<< monster_act_value[i][0] <<" damage, "<<play[s].map_name<<" shield "<<play[s].round_shield<<", "<< play[s].map_name<<" remain "<< play[s].round_hp<<" hp\n";
+					cout << Monster.monster_card_name<<" attack "<< play[s].map_name<<" "<< monster_act_value[i][0] <<" damage, "<<play[s].map_name+ Monster.monster_attack <<" shield "<<play[s].round_shield<<", "<< play[s].map_name<<" remain "<< play[s].round_hp<<" hp\n";
 					break;
 				}
 				else {
