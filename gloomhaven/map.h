@@ -668,6 +668,12 @@ void map::monster__action(evil_guy &Monster, vector<character> &play, vector<evi
 						j++;
 					}
 			}
+			for (int pp = 0; pp < monster_char_name.size(); pp++) {
+				if (monster_char_name[pp] = Monster.monster_card_name) {
+					monster_location_x[pp]= Monster.x;
+					monster_location_y[pp]= Monster.y;
+				}
+			}
 			for (int h = 0; h < Monster_all.size(); h++) {
 				if (Monster_all[h].monster_card_name == Monster.monster_card_name) {
 					Monster_all[h] = Monster;
