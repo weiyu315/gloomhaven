@@ -544,7 +544,7 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 				}
 				if (i == wave.size() - 1) {
 					for (int s = 0; s < hero_char_name.size(); s++) {
-						if (hero_location_x[s] == x && hero_location_y[s] == y&&c_name!=hero_char_name[i]) {
+						if (hero_location_x[s] == x && hero_location_y[s] == y&&c_name!=hero_char_name[s]) {
 							ture2 = true;
 						}
 					}

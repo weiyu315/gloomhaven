@@ -471,6 +471,7 @@ int main(int argc, char* argv[])
 																if (!Monster[b].live_or_die)
 																{
 																	cout << Monster[b].Get_monster_card_name() << " is killed!!" << endl;
+																	Monster.erase(Monster.begin()+b);
 																}
 																goto to_break_u;
 															}
