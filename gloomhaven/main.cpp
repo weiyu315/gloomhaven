@@ -112,6 +112,7 @@ int main(int argc, char* argv[])
 				{
 					break;
 				}
+			re_input:;
 				cin >> first_input;
 				for (; k < playCharacter.size(); k++)
 				{
@@ -196,8 +197,13 @@ int main(int argc, char* argv[])
 								{
 									cin >> using_card_number;
 								}
+								if (!using_card_number_exist)
+								{
+									goto re_input;
+									cout << "123" << endl;
+								}
 							}
-							if (using_card_number_exist) { playCharacter_amount--; }
+							playCharacter_amount--; 
 							playCharacter[k].round_dex = playCharacter[k].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
 							
 						}
@@ -479,8 +485,8 @@ int main(int argc, char* argv[])
 												cout << playCharacter[j].map_name << " shield " << s.value << " this turn" << endl;
 												break;
 											case 2://move val
-												//cout << "umove command: ";
 												Map.move(playCharacter[j].map_name, s.value, Monster);
+												Map.output(Monster);
 												break;
 											case 3://heal val
 												if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
@@ -551,8 +557,8 @@ int main(int argc, char* argv[])
 												cout << playCharacter[j].map_name << " shield " << s.value << " this turn" << endl;
 												break;
 											case 2://move val
-												//cout << "dmove command: ";
 												Map.move(playCharacter[j].map_name, s.value, Monster);
+												Map.output(Monster);
 												break;
 											case 3://heal val
 												if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
