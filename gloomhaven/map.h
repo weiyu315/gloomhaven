@@ -50,7 +50,7 @@ public:
 	void output_decide_map(vector<evil_guy> Monster);
 	void output(vector<evil_guy> Monster);
 	char output_point_map(int x,int y,vector<evil_guy> Monster,int level);//level 0表示為選擇狀態，level1表示為正常
-	void monster__action();
+	void monster__action(evil_guy Monster,vector<character> play, vector<evil_guy> Monster_all);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	bool monster_decide(int x,int y);// 4-1 判斷怪物是否在顯示地圖內
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +62,7 @@ public:
 	vector<int>hero_location_x;//儲存腳色選擇後的位子
 	vector<int>hero_location_y;
 	vector<int>hero_char_name;
+	vector<int>hero_status;
 };
 map::map() {
 	hight = 0;
@@ -192,6 +193,7 @@ bool map::Set_start_point() {
 		}
 	}
 	hero_char_name.push_back('A' + hero_char_name.size() );
+	hero_status.push_back(1);
 	hero_location_x.push_back(start_point_x);
 	hero_location_y.push_back(start_point_y);
 	return 1;
@@ -394,7 +396,6 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 				else {
 					for (int j = 0; j < hero_location_x.size(); j++) {
 						if (x == hero_location_x[j] && y == hero_location_y[j]) {
-							
 							return hero_char_name[j];
 						}
 					}
@@ -412,7 +413,9 @@ char map::output_point_map(int x, int y, vector<evil_guy> Monster, int level) {
 	if (level == 1) {
 		for (int j = 0; j < hero_location_x.size(); j++) {
 			if (x == hero_location_x[j] && y == hero_location_y[j]) {
-				return hero_char_name[j];
+				if (hero_status[j] == 1) {
+					return hero_char_name[j];
+				}
 			}
 		}
 		for (int i = 0; i < Monster.size(); i++) {
@@ -556,7 +559,7 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 				if (i == wave.size() - 1) {
 					for (int s = 0; s < hero_char_name.size(); s++) {
 						if (hero_location_x[s] == x && hero_location_y[s] == y&&c_name!=hero_char_name[s]) {
-							ture2 = true;
+							if (hero_status[s] == 1) { ture2 = true; }
 						}
 					}
 				}
@@ -585,4 +588,119 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 			}
 		}
 	}
+};
+void map::monster__action(evil_guy Monster, vector<character> play, vector<evil_guy> Monster_all) {
+	vector<int>monster_act= Monster.correct_card.Get_card_action();
+	vector<vector<int>> monster_act_value= Monster.correct_card.Get_card_action_value();
+	bool ture = false;
+	int j;
+	for (int i = 0; i < monster_act.size();i++) {
+		int z;
+		//0為move,1為attack,2為shield,3為heal
+		if (monster_act[i] == 0) {
+			j = 0;
+			ture = false;
+			while (ture = false) {
+					if (monster_act_value[i][j] == 0) {
+						if (original_map[Monster.y - 1][Monster.x] == 2 || original_map[Monster.y - 1][Monster.x] == 0 || original_map[Monster.y - 1][Monster.x] == 3) {
+							ture = true;
+						}
+						else {
+							Monster.y--;
+						}
+						for (int s = 0; s < hero_char_name.size(); s++) {
+							if (Monster.x == hero_location_x[s] && Monster.y == hero_location_y[s]) {
+								ture = true;
+								Monster.y++;
+							}
+						}
+
+					}
+					if (monster_act_value[i][j] == 1) {
+						if (original_map[Monster.y][Monster.x - 1] == 2 || original_map[Monster.y][Monster.x - 1] == 0 || original_map[Monster.y][Monster.x - 1] == 3) {
+							ture = true;
+						}
+						else {
+							Monster.x--;
+						}
+						for (int s = 0; s < hero_char_name.size(); s++) {
+							if (Monster.x == hero_location_x[s] && Monster.y == hero_location_y[s]) {
+								ture = true;
+								Monster.x++;
+							}
+						}
+
+					}
+					if (monster_act_value[i][j] == 2) {
+						if (original_map[Monster.y + 1][Monster.x] == 2 || original_map[Monster.y + 1][Monster.x] == 0 || original_map[Monster.y + 1][Monster.x] == 3) {
+							ture = true;
+						}
+						else {
+							Monster.y++;
+						}
+						for (int s = 0; s < hero_char_name.size(); s++) {
+							if (Monster.x == hero_location_x[s] && Monster.y == hero_location_y[s]) {
+								ture = true;
+								Monster.y--;
+							}
+						}
+
+					}
+					if (monster_act_value[i][j] == 3) {
+						if (original_map[Monster.y][Monster.x++] == 2 || original_map[Monster.y][Monster.x++] == 0 || original_map[Monster.y][Monster.x++] == 3) {
+							ture = true;
+						}
+						else {
+							Monster.x++;
+						}
+						for (int s = 0; s < hero_char_name.size(); s++) {
+							if (Monster.x == hero_location_x[s] && Monster.y == hero_location_y[s]) {
+								ture = true;
+								Monster.x--;
+							}
+						}
+
+					}
+					if (j == monster_act_value[i].size() - 1) {
+
+					}
+					else {
+						j++;
+					}
+			}
+			output(Monster_all);
+		}
+
+		if (monster_act[i] == 1) {
+			for (int s = 0; s < play.size(); s++) {
+				if (distant(play[s].map_name,Monster.monster_card_name, monster_act_value[i][1])) {
+					for (z = 0; z < hero_char_name.size(); z++) {
+						if (hero_char_name[z] == play[s].map_name) {
+							cout << Monster.monster_card_name << " lock " << play[s].map_name << " in distance " << attack_range(hero_location_x[z],hero_location_y[z],Monster.x,Monster.y, 0);
+						}
+					}
+					if (play[s].round_shield < monster_act_value[i][0]) {
+						play[s].round_hp = play[s].round_hp + play[s].round_shield - monster_act_value[i][0];
+					}
+					cout << Monster.monster_card_name<<" attack "<< play[s].map_name<<" "<< monster_act_value[i][0] <<" damage, "<<play[s].map_name<<" shield "<<play[s].round_shield<<", "<< play[s].map_name<<" remain "<< play[s].round_hp<<"\n";
+					break;
+				}
+				else {
+					cout << "no one lock\n";
+				}
+			}
+		}
+		if (monster_act[i] == 2) {
+			cout << Monster.monster_card_name << " shield " << monster_act_value[i][0] << "this turn\n";
+		}
+		if (monster_act[i] == 3) {
+			Monster.monster_current_hp = Monster.monster_current_hp +monster_act_value[i][0];
+			if (Monster.monster_current_hp > Monster.monster_max_hp) {
+				Monster.monster_current_hp = Monster.monster_max_hp;
+			}
+			cout << Monster.monster_card_name << "  heal " << monster_act_value[i][0] << ", now hp is " << Monster.monster_current_hp;
+
+		}
+	}
+
 };
