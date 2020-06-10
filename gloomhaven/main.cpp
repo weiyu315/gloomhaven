@@ -90,7 +90,6 @@ re_play:;
 		bool map_name_finish = false;
 		while (!end_round)
 		{
-			cout << "re 00000000000000" << endl;
 			/*-----------------------------------角色選擇牌順序或是長休或是check---------------------------------------*/
 			for (auto& n : playCharacter)
 			{
@@ -737,15 +736,18 @@ re_play:;
 			{ 
 				cout << "monster win~" << endl; 
 				end_round = true; 
-				return 0;
+				goto re_play;
 			}
-			if (character_win) 
+			else if (character_win) 
 			{ 
 				cout << "character win~" << endl; 
 				end_round = true; 
-				return 0;
+				goto re_play;
 			}
-			cout << "round " << ++round << ":" << endl;
+			else
+			{
+				cout << "round " << ++round << ":" << endl;
+			}
 		}
 		return 0;
 	}
