@@ -678,22 +678,58 @@ void map::monster__action(evil_guy &Monster, vector<character> &play, vector<evi
 
 		if (monster_act[i] == 1) {
 			bool uy = false;
+			int current_a;
+			int a;
 			for (int s = 0; s < play.size(); s++) {
-				if (distant(play[s].map_name,Monster.monster_card_name, monster_act_value[i][1]+Monster.monster_range)) {
+				if (distant(play[s].map_name, Monster.monster_card_name, monster_act_value[i][1] + Monster.monster_range)) {
 					uy = true;
+					current_a = s;
 					for (z = 0; z < hero_char_name.size(); z++) {
-						if (hero_char_name[z] == play[s].map_name) {
-							cout << Monster.monster_card_name << " lock " << play[s].map_name << " in distance " << attack_range(hero_location_x[z], hero_location_y[z], Monster.x, Monster.y, 0) << endl;
+						if (hero_char_name[z] == play[current_a].map_name) {
+							a=attack_range(hero_location_x[z], hero_location_y[z], Monster.x, Monster.y, 0);
 						}
 					}
-					if (play[s].round_shield < monster_act_value[i][0] + Monster.monster_attack) {
-						play[s].round_hp = play[s].round_hp + play[s].round_shield - monster_act_value[i][0]- Monster.monster_attack;
-					}
-					cout << Monster.monster_card_name<<" attack "<< play[s].map_name<<" "<< monster_act_value[i][0] <<" damage, "<<play[s].map_name+ Monster.monster_attack <<" shield "<<play[s].round_shield<<", "<< play[s].map_name<<" remain "<< play[s].round_hp<<" hp\n";
 					break;
 				}
-				
 			}
+			for (int s = 0; s < play.size(); s++) {
+				if (distant(play[s].map_name, Monster.monster_card_name, monster_act_value[i][1] + Monster.monster_range)) {
+					for (z = 0; z < hero_char_name.size(); z++) {
+						if (hero_char_name[z] == play[current_a].map_name) {
+							if (a > attack_range(hero_location_x[z], hero_location_y[z], Monster.x, Monster.y, 0)) {
+								a = attack_range(hero_location_x[z], hero_location_y[z], Monster.x, Monster.y, 0);
+								current_a = s;
+							}
+							if (a == attack_range(hero_location_x[z], hero_location_y[z], Monster.x, Monster.y, 0)) {
+								if(play[current_a].map_name > play[s].map_name){
+                                 a = attack_range(hero_location_x[z], hero_location_y[z], Monster.x, Monster.y, 0);
+								current_a = s;
+							}
+							}
+						}
+					}
+				}
+			}
+			//////////////////////////////////////////////////////////////////////////////////
+			if (uy == true) {
+				for (z = 0; z < hero_char_name.size(); z++) {
+					if (hero_char_name[z] == play[current_a].map_name) {
+						cout << Monster.monster_card_name << " lock " << play[current_a].map_name << " in distance " << attack_range(hero_location_x[z], hero_location_y[z], Monster.x, Monster.y, 0) << endl;
+					}
+				}
+				if (play[current_a].round_shield < monster_act_value[i][0] + Monster.monster_attack) {
+					play[current_a].round_hp = play[current_a].round_hp + play[current_a].round_shield - monster_act_value[i][0] - Monster.monster_attack;
+				}
+				cout << Monster.monster_card_name << " attack " << play[current_a].map_name << " " << monster_act_value[i][0] << " damage, " << play[current_a].map_name + Monster.monster_attack << " shield " << play[current_a].round_shield << ", " << play[current_a].map_name << " remain " << play[current_a].round_hp << " hp\n";
+				if (play[current_a].round_hp == 0) {
+					for (z = 0; z < hero_char_name.size(); z++) {
+						if (hero_char_name[z] == play[current_a].map_name) {
+							hero_status[z] = 0;
+						}
+					}
+				}
+			}
+			//////////////////////////////////////////////////////////////////////////////////////
 		if(uy==false) {
 			cout << "no one lock\n";
 		}
@@ -706,7 +742,7 @@ void map::monster__action(evil_guy &Monster, vector<character> &play, vector<evi
 			if (Monster.monster_current_hp > Monster.monster_max_hp) {
 				Monster.monster_current_hp = Monster.monster_max_hp;
 			}
-			cout << Monster.monster_card_name << "  heal " << monster_act_value[i][0] << ", now hp is " << Monster.monster_current_hp;
+			cout << Monster.monster_card_name << " heal " << monster_act_value[i][0] << ", now hp is " << Monster.monster_current_hp<<"\n";
 
 		}
 	}
