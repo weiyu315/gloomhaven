@@ -23,7 +23,7 @@ re_play:;
 	{
 		cout << "請輸入出場角色數量:";
 		string map_file;
-		int debug_Mode = 0;//暫時等於1
+		int debug_Mode = 1;//暫時等於1
 		characterFileReader("character1.txt", Character);
 		/*characterFileReader(argv[1], Character);//角色讀檔
 		ifstream monster_inFile(argv[2], ios::in);
@@ -318,6 +318,58 @@ re_play:;
 						c = playCharacter[i].round_order;
 						playCharacter[i].round_order = output_Monster[j].round_order;
 						output_Monster[j].round_order = c;
+					}
+				}
+			}
+			for (int i = 0; i < playCharacter.size(); i++) {
+				for (int j = 0; j < i; j++) {
+					if (playCharacter[i].round_dex < playCharacter[j].round_dex && playCharacter[i].round_order > playCharacter[j].round_order) {
+						c = playCharacter[i].round_order;
+						playCharacter[i].round_order = playCharacter[j].round_order;
+						playCharacter[j].round_order = c;
+					}
+					if (playCharacter[i].round_dex > playCharacter[j].round_dex && playCharacter[i].round_order < playCharacter[j].round_order) {
+						c = playCharacter[i].round_order;
+						playCharacter[i].round_order = playCharacter[j].round_order;
+						playCharacter[j].round_order = c;
+					}
+					if (playCharacter[i].round_dex == playCharacter[j].round_dex) {
+						if (playCharacter[i].map_name < playCharacter[j].map_name && playCharacter[i].round_order > playCharacter[j].round_order) {
+							c = playCharacter[i].round_order;
+							playCharacter[i].round_order = playCharacter[j].round_order;
+							playCharacter[j].round_order = c;
+						}
+						if (playCharacter[i].map_name > playCharacter[j].map_name && playCharacter[i].round_order < playCharacter[j].round_order) {
+							c = playCharacter[i].round_order;
+							playCharacter[i].round_order = playCharacter[j].round_order;
+							playCharacter[j].round_order = c;
+						}
+					}
+				}
+			}
+			for (int i = 0; i < output_Monster.size(); i++) {
+				for (int j = 0; j < i; j++) {
+					if (output_Monster[i].Get_correct_card_agility() < output_Monster[j].Get_correct_card_agility() && output_Monster[i].round_order > output_Monster[j].round_order) {
+						c = output_Monster[i].round_order;
+						output_Monster[i].round_order = output_Monster[j].round_order;
+						output_Monster[j].round_order = c;
+					}
+					if (output_Monster[i].Get_correct_card_agility() > output_Monster[j].Get_correct_card_agility() && output_Monster[i].round_order < output_Monster[j].round_order) {
+						c = output_Monster[i].round_order;
+						output_Monster[i].round_order = output_Monster[j].round_order;
+						output_Monster[j].round_order = c;
+					}
+					if (output_Monster[i].Get_correct_card_agility() == output_Monster[j].Get_correct_card_agility()) {
+						if (output_Monster[i].Get_monster_card_name() < output_Monster[j].Get_monster_card_name() && output_Monster[i].round_order > output_Monster[j].round_order) {
+							c = output_Monster[i].round_order;
+							output_Monster[i].round_order = output_Monster[j].round_order;
+							output_Monster[j].round_order = c;
+						}
+						if (output_Monster[i].Get_monster_card_name() > output_Monster[j].Get_monster_card_name() && output_Monster[i].round_order < output_Monster[j].round_order) {
+							c = output_Monster[i].round_order;
+							output_Monster[i].round_order = output_Monster[j].round_order;
+							output_Monster[j].round_order = c;
+						}
 					}
 				}
 			}
