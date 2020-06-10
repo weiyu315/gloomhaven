@@ -545,6 +545,10 @@ re_play:;
 																if (Monster[b].monster_current_hp <= 0) {
 																	Monster[b].live_or_die = false;
 																}
+																else
+																{
+																	Monster[b].live_or_die = true;
+																}
 																Map.output(Monster);
 																cout << playCharacter[j].map_name << " attack " << Monster[b].Get_monster_card_name() << " " << damage << " damage, " << Monster[b].Get_monster_card_name() << " shield " << Monster[b].monster_current_shield << ", " << Monster[b].Get_monster_card_name() << " remain " << Monster[b].monster_current_hp << " hp" << endl;
 																if (!Monster[b].live_or_die)
@@ -555,7 +559,7 @@ re_play:;
 																			output_Monster.erase(output_Monster.begin() + c);
 																		}
 																	}
-																	Monster.erase(Monster.begin()+b);
+																	Monster.erase(Monster.begin() + b);
 																}
 																goto to_break_u;
 															}
@@ -575,6 +579,7 @@ re_play:;
 												Map.output(Monster);
 												break;
 											case 3://heal val
+												playCharacter[j].round_hp += s.value;
 												if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
 												cout << playCharacter[j].map_name << " heal " << s.value << ", now hp is " << playCharacter[j].round_hp << endl;
 												break;
@@ -623,6 +628,10 @@ re_play:;
 																if (Monster[b].monster_current_hp <= 0) {
 																	Monster[b].live_or_die = false;
 																}
+																else
+																{
+																	Monster[b].live_or_die = true;
+																}
 																Map.output(Monster);
 																cout << playCharacter[j].map_name << " attack " << Monster[b].Get_monster_card_name() << " " << damage << " damage, " << Monster[b].Get_monster_card_name() << " shield " << Monster[b].monster_current_shield << ", " << Monster[b].Get_monster_card_name() << " remain " << Monster[b].monster_current_hp << " hp" << endl;
 																if (!Monster[b].live_or_die)
@@ -653,6 +662,7 @@ re_play:;
 												Map.output(Monster);
 												break;
 											case 3://heal val
+												playCharacter[j].round_hp += s.value;
 												if (playCharacter[j].round_hp > playCharacter[j].max_hp) { playCharacter[j].round_hp = playCharacter[j].max_hp; }
 												cout << playCharacter[j].map_name << " heal " << s.value << ", now hp is " << playCharacter[j].round_hp << endl;
 												break;
