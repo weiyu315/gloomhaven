@@ -353,7 +353,7 @@ int main(int argc, char* argv[])
 			for (int i = 0; i < playCharacter.size() + output_Monster.size(); i++) {
 				string next_input;
 				for (int j = 0; j < playCharacter.size(); j++) {
-					if (playCharacter[j].round_order == i) {
+					if (playCharacter[j].round_order == i)  {
 						int card_numberTmp;//存5u 12d之類的前面的數字 或是 在長休狀態下要丟棄的牌
 						char up_or_down;//存u或d
 						if (playCharacter[j].alive && !playCharacter[j].long_rest && playCharacter[j].choose_using_card)//若角色活著且非長休狀態
