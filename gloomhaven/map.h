@@ -259,6 +259,9 @@ bool map::initalization_map(int x, int y) {
 				if (door_open_or_close[i] == 0) {
 					return 0;
 				}
+				else {
+					original_map[y][x] = 1;
+				}
 			}
 		}
 	}
@@ -556,6 +559,9 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 							ture2 = true;
 						}
 					}
+				}
+				if (cout_map[y][x] == 0) {
+					ture2 = true;
 				}
 				if (original_map[y][x] == 0 || original_map[y][x] == 2) {
 					ture2= true;

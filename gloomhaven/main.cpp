@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
 				n.round_shield = 0;
 			}
 			int playCharacter_amount = playCharacter.size();
-			while(true)
+			while (true)
 			{
 				if (playCharacter_amount <= 0) { break; }
 				int k = 0;
@@ -196,9 +196,9 @@ int main(int argc, char* argv[])
 									goto re_input;
 								}
 							}
-							playCharacter_amount--; 
+							playCharacter_amount--;
 							playCharacter[k].round_dex = playCharacter[k].using_card[0].dex;//以第一張牌的敏捷值作為本輪敏捷值
-							
+
 						}
 					}
 					else
@@ -254,7 +254,7 @@ int main(int argc, char* argv[])
 							playCharacter[i].round_order = playCharacter[j].round_order;
 							playCharacter[j].round_order = c;
 						}
-						if (playCharacter[i].map_name > playCharacter[j].map_name&& playCharacter[i].round_order < playCharacter[j].round_order) {
+						if (playCharacter[i].map_name > playCharacter[j].map_name && playCharacter[i].round_order < playCharacter[j].round_order) {
 							c = playCharacter[i].round_order;
 							playCharacter[i].round_order = playCharacter[j].round_order;
 							playCharacter[j].round_order = c;
@@ -354,7 +354,7 @@ int main(int argc, char* argv[])
 			for (int i = 0; i < playCharacter.size() + output_Monster.size(); i++) {
 				string next_input;
 				for (int j = 0; j < playCharacter.size(); j++) {
-					if (playCharacter[j].round_order == i)  {
+					if (playCharacter[j].round_order == i) {
 						int card_numberTmp;//存5u 12d之類的前面的數字 或是 在長休狀態下要丟棄的牌
 						char up_or_down;//存u或d
 						if (playCharacter[j].alive && !playCharacter[j].long_rest && playCharacter[j].choose_using_card)//若角色活著且非長休狀態
@@ -469,7 +469,7 @@ int main(int argc, char* argv[])
 																			output_Monster.erase(output_Monster.begin() + c);
 																		}
 																	}
-																	Monster.erase(Monster.begin()+b);
+																	Monster.erase(Monster.begin() + b);
 																}
 																goto to_break_u;
 															}
@@ -598,11 +598,8 @@ int main(int argc, char* argv[])
 								{
 									c.remove = true;
 								}
-								else
-								{
-									c.discard = false;
-								}
-								//cout << c.number << " " << c.discard << endl;
+								c.discard = false;
+								cout << " here " << c.number << " " << c.discard << endl;
 							}
 						}
 					}
@@ -628,7 +625,7 @@ int main(int argc, char* argv[])
 					}
 				}
 			}
-			
+
 			cout << "round " << ++round << ":" << endl;
 		}
 		return 0;
