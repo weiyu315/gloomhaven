@@ -19,9 +19,6 @@ private:
 	int startlocation_y[4];
 	int start_point_x;//儲存一開始*的位置
 	int start_point_y;
-	vector<int>hero_location_x;//儲存腳色選擇後的位子
-	vector<int>hero_location_y;
-	vector<int>hero_char_name;
 	/*---------------------------------------------------------------*/
 	vector<int> door_x;//門的位置
 	vector<int> door_y;
@@ -49,7 +46,7 @@ public:
 	int Get_monster_location_y(int n);
 	int Get_monster_status(int n,int hero_qualify);
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
-	void initalization_map(int x,int y);//初始化地圖
+	bool initalization_map(int x,int y);//初始化地圖
 	void output_decide_map(vector<evil_guy> Monster);
 	void output(vector<evil_guy> Monster);
 	char output_point_map(int x,int y,vector<evil_guy> Monster,int level);//level 0表示為選擇狀態，level1表示為正常
@@ -61,6 +58,10 @@ public:
 	bool see(int c_x, int c_y, int m_x,int m_y);
 	int attack_range(int c_x, int c_y, int m_x, int m_y,int step);
 	void move(char c_name,int wafe, vector<evil_guy> Monster);
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	vector<int>hero_location_x;//儲存腳色選擇後的位子
+	vector<int>hero_location_y;
+	vector<int>hero_char_name;
 };
 map::map() {
 	hight = 0;
@@ -246,19 +247,24 @@ void map::Set_map(string n) {
 	}
 };
 ////////////////////////////////////////////////////////////////////////////////////////
-void map::initalization_map(int x,int y) {
+bool map::initalization_map(int x, int y) {
+	int ds=0;
+	if (cout_map[y][x] == 0) {
+		ds = 1;
+	}
 	cout_map[y][x] = 1;
 	if (original_map[y][x] == 3) {
 		for (int i = 0; i < door_x.size(); i++) {
 			if (door_x[i] == x && door_y[i] == y) {
 				if (door_open_or_close[i] == 0) {
-					return;
+					return 0;
 				}
 			}
 		}
 	}
 		if (original_map[y+1][x] == 1|| original_map[y+1][x] == 2|| original_map[y + 1][x] == 3) {
 			if (cout_map[y + 1][x] == 0) {
+				ds = 1;
 				initalization_map(x, y + 1);
 			}
 	}
@@ -269,15 +275,17 @@ void map::initalization_map(int x,int y) {
 		}
 		if (original_map[y - 1][x] == 1 || original_map[y - 1][x] == 2|| original_map[y - 1][x] == 3) {
 			if (cout_map[y - 1][x] == 0) {
+				ds = 1;
 				initalization_map(x, y - 1);
 			}
 		}
 		if (original_map[y][x-1] == 1 || original_map[y][x-1] == 2|| original_map[y][x - 1] == 3) {
 			if (cout_map[y][x-1] == 0) {
+				ds = 1;
 				initalization_map(x-1, y);
 			}
 		}
-
+		return ds;
 };
 ////////////////////////////////////////////////////////////////////////////////////
 void map::Set_initialization_point() {
@@ -562,6 +570,13 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 		if (hero_char_name[i] == c_name) {
 			hero_location_x[i] = x;
 			hero_location_y[i] = y;
+		}
+	}
+	if (original_map[y][x] == 3|| Monster.size()==0) {
+		for (int i = 0; i < door_open_or_close.size(); i++) {
+			if (door_x[i] == x && door_y[i]==y) {
+				door_open_or_close[i] = 1;
+			}
 		}
 	}
 };
