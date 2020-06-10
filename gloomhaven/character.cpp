@@ -28,14 +28,10 @@ bool character::setUsing_card(int index, int newUsing_card_number, card newUsing
 		if (i >= newHand_card.size())
 		{
 			exist = false;
-			cout << "Warning: Card number isn't exist in hand card." << endl;
-			break;
+			cout << "Warning: Card number isn't exist in hand card!! Input again." << endl;
+			return false;
 		}
 	}
-	if (exist)
-	{
-		newUsing_card[index] = newHand_card[i];
-		return true;
-	}
-	return false;
+	newUsing_card[index] = newHand_card[i];
+	return true;
 }
