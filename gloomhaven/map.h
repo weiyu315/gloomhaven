@@ -50,7 +50,7 @@ public:
 	void output_decide_map(vector<evil_guy> Monster);
 	void output(vector<evil_guy> Monster);
 	char output_point_map(int x,int y,vector<evil_guy> Monster,int level);//level 0表示為選擇狀態，level1表示為正常
-
+	void monster__action();
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	bool monster_decide(int x,int y);// 4-1 判斷怪物是否在顯示地圖內
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,6 +258,9 @@ bool map::initalization_map(int x, int y) {
 			if (door_x[i] == x && door_y[i] == y) {
 				if (door_open_or_close[i] == 0) {
 					return 0;
+				}
+				else {
+					original_map[y][x] = 1;
 				}
 			}
 		}
@@ -556,6 +559,9 @@ void map::move(char c_name,int wafe,vector<evil_guy> Monster) {
 							ture2 = true;
 						}
 					}
+				}
+				if (cout_map[y][x] == 0) {
+					ture2 = true;
 				}
 				if (original_map[y][x] == 0 || original_map[y][x] == 2) {
 					ture2= true;
