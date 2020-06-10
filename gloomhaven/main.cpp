@@ -23,7 +23,7 @@ re_play:;
 	{
 		cout << "請輸入出場角色數量:";
 		string map_file;
-		int debug_Mode = 0;//暫時等於1
+		int debug_Mode = 1;//暫時等於1
 		characterFileReader("character1.txt", Character);
 		/*characterFileReader(argv[1], Character);//角色讀檔
 		ifstream monster_inFile(argv[2], ios::in);
@@ -403,6 +403,13 @@ re_play:;
 										cout << n.map_name << "-hp: " << n.round_hp << ", shield: " << n.round_shield << endl;
 									}
 								}
+								for (auto n : Monster)
+								{
+									if (n.monster_current_hp > 0)
+									{
+										cout << n.monster_card_name << "-hp: " << n.monster_current_hp << ", shield: " << n.monster_current_shield << endl;
+									}
+								}
 								goto restart;
 							}
 							else
@@ -444,7 +451,7 @@ re_play:;
 											{
 											case 0://attack val
 											start_u:;
-												cout << "attack monster: ";
+												cout << "attack monster(input monster to attack or 0 to pass): ";
 												cin >> monster_map_name;
 												if (monster_map_name != '0')
 												{
@@ -522,7 +529,7 @@ re_play:;
 											{
 											case 0://attack val
 											start_d:;
-												cout << "attack monster: ";
+												cout << "attack monster(input monster to attack or 0 to pass): ";
 												cin >> monster_map_name;
 												if (monster_map_name != '0')
 												{
@@ -645,7 +652,38 @@ re_play:;
 					}
 				}
 			}
-			
+			bool monster_win = false;
+			bool character_win = true;
+			for (auto n : playCharacter)
+			{
+				if (n.alive)
+				{
+					monster_win = false;
+					break;
+				}
+				monster_win = true;
+			}
+			for (auto n : Monster)
+			{
+				if (n.monster_current_hp > 0)
+				{
+					character_win = false;
+					break;
+				}
+				character_win = true;
+			}
+			if (monster_win) 
+			{ 
+				cout << "monster win~" << endl; 
+				end_round = true; 
+				return 0;
+			}
+			if (character_win) 
+			{ 
+				cout << "character win~" << endl; 
+				end_round = true; 
+				return 0;
+			}
 			cout << "round " << ++round << ":" << endl;
 		}
 		return 0;
