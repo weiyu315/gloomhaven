@@ -97,6 +97,10 @@ re_play:;
 				n.long_rest = false;
 				n.round_shield = 0;
 			}
+			for (auto n : Monster)
+			{
+				n.monster_current_shield = 0;
+			}
 			int playCharacter_amount = playCharacter.size();
 			while(true)
 			{
