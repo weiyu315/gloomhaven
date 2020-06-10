@@ -391,6 +391,7 @@ int main(int argc, char* argv[])
 										cout << n.map_name << "-hp: " << n.round_hp << ", shield: " << n.round_shield << endl;
 									}
 								}
+								goto restart;
 							}
 							else
 							{
